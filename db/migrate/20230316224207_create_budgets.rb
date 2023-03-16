@@ -5,6 +5,7 @@ class CreateBudgets < ActiveRecord::Migration[7.0]
       t.integer :user_id
       t.integer :commitment_id
       t.float :commitment_hours
+      t.integer :priority
 
       t.timestamps
     end

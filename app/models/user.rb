@@ -1,9 +1,10 @@
 class User < ApplicationRecord
+    has_secure_password
 
     has_many :budgets
     has_many :commitments, through: :budgets
 
-    validates :username, presence: true, uniqueness: true, length { minimum: 2}
+    validates :username, presence: true, uniqueness: true, length: { minimum: 2}
     validates :first_name, presence: true
     validates :last_name, presence: true
     VALID_EMAIL_REGEX= /^(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6})$/i
