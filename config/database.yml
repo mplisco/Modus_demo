@@ -81,6 +81,4 @@ test:
 #
 production:
   <<: *default
-  database: modus_demo_production
-  username: modus_demo
-  password: <%= ENV["MODUS_DEMO_DATABASE_PASSWORD"] %>
+  url: <%= ENV['DATABASE_URL'] %>
