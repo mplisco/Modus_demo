@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import './App.css';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
-// import SignupPage from "./components/Signup";
+import SignUpPage from "./components/SignupPage";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -44,6 +44,9 @@ function App() {
         <Switch>
           <Route path="/login">
             <LoginPage handleUserLogin={handleUserLogin}/>
+          </Route>
+          <Route path="/signup">
+            <SignUpPage/>
           </Route>
           <Route path="/home">
             <h1>Page Count: {count}</h1>
