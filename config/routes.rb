@@ -1,13 +1,16 @@
 Rails.application.routes.draw do
 
-  resources :users, except: [:new, :edit]
-  
-  get '/auth', to: 'users#find_current_user'
-  # get '/hello', to: 'application#hello_world'
-  # get '*path',
-  #     to: 'fallback#index',
-  #     constraints: ->(req) { !req.xhr? && req.format.html? }
-
   post "/login", to: "sessions#create"
   delete '/logout', to: 'sessions#destroy'
+
+  get '/auth', to: 'users#find_current_user'
+
+  get '/mybudgets', to: 'budgets#user_budgets'
+  get '/home', to: 'budgets#budget_list'
+
+  resources :users, except: [:new, :edit]
+  resources :budgets, except: [:new, :edit]
+  resources :commitments, only: [:index, :show]
+  resources :categories, only: [:index, :show]
+
 end

@@ -34,5 +34,30 @@ category6 = Category.create(category_name: "Other")
 
 puts "✅ Done seeding categories!"
 
+puts "🌱 Planting Commitment seeds..."
 
+wp1 = Commitment.create( commitment_name: "Working Hours", category_id: 1)
+wp2 = Commitment.create( commitment_name: "Commute", category_id: 1)
+ssc1 = Commitment.create( commitment_name: "Sleep", category_id: 2)
+ssc2 = Commitment.create( commitment_name: "Personal Hygiene", category_id: 2)
+ssc3 = Commitment.create( commitment_name: "Leisure Time", category_id: 2)
+hw1 = Commitment.create( commitment_name: "Running", category_id: 3)
+hw2 = Commitment.create( commitment_name: "Yoga", category_id: 3)
+hw3 = Commitment.create( commitment_name: "Meditation", category_id: 3)
+hi1 = Commitment.create( commitment_name: "Reading", category_id: 4)
+hi1 = Commitment.create( commitment_name: "Reading", category_id: 4)
+hi2 = Commitment.create( commitment_name: "Professional Development", category_id: 4)
+fsl1 = Commitment.create( commitment_name: "Significant Other", category_id: 5 )
+fsl2 = Commitment.create( commitment_name: "Family", category_id: 5)
+fsl3 = Commitment.create( commitment_name: "Friends", category_id: 5)
+o1 = Commitment.create( commitment_name: "Flex Time", category_id: 6)
+o2 = Commitment.create(commitment_name: "Travel", category_id: 6)
 
+puts "✅ Done seeding commitments!"
+
+puts "🌱 Planting budget seeds..."
+
+bc1 = Budget.create(budget_name: "Default Time Budget", user_id: 1, commitment_id: 1, priority: 0, commitment_hours: 40)
+bc2 = Budget.create(budget_name: "Default Time Budget", user_id: 1, commitment_id: 2, priority: 1, commitment_hours: 3)
+
+puts "✅ Done seeding budgets!"
