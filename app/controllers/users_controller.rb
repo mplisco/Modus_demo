@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+    
     skip_before_action :authorized, only: [:create, :show]
 
     #will need to use custom method to pull budgets for specific users and/or by name - get route for custom method
@@ -47,7 +48,7 @@ class UsersController < ApplicationController
     end
 
     def user_params
-        params.permit(:user_name, :first_name, :last_name, :full_name, :email, :password, :password_confirmation)
+        params.permit(:username, :first_name, :last_name, :full_name, :email, :password, :password_confirmation)
     end
 
 end
