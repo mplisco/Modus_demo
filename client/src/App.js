@@ -3,12 +3,15 @@ import './App.css';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import SignUpPage from "./components/SignupPage";
+import Home from "./components/Home";
 
 function App() {
   const [count, setCount] = useState(0);
 
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState('');
+  const [budgets, setBudgets] = useState([]);
+  const [budgetList, setBudgetList] = useState([]);
 
   // useEffect(() => {
   //   fetch("/hello")
@@ -34,6 +37,18 @@ function App() {
     })
   }, [])
 
+  useEffect(() => {
+    fetch("/mybudgets")
+    .then((r) => r.json())
+    .then((data) => setBudgets(data))
+  }, []);
+
+  useEffect(() => {
+    fetch("/home")
+    .then((r) => r.json())
+    .then((data) => setBudgetList(data))
+  }, []);
+
   function handleUserLogin(user) {
     setCurrentUser(user)
   }
@@ -42,6 +57,11 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <Switch>
+          <Route path="/home">
+            <Home
+            budgets={budgets}
+            budgetList={budgetList}/>
+          </Route>
           <Route path="/login">
             <LoginPage handleUserLogin={handleUserLogin}/>
           </Route>
