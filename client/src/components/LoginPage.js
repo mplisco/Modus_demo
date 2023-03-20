@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Redirect, Route, useHistory } from "react-router-dom";
+import TextField from '@mui/material/TextField';
 
 function LoginPage({ handleUserLogin, currentUser }) {
   const [username, setUsername] = useState('');
@@ -34,6 +35,12 @@ function LoginPage({ handleUserLogin, currentUser }) {
     <div>
       <form>
         <div>
+        {/* <TextField
+          required
+          id="outlined-required"
+          label="User Name"
+          defaultValue="User Name"
+        /> */}
           <label>Username: </label>
           <input type="text" name="username" value={username}
             onChange={ (e) => setUsername(e.target.value) }/>
