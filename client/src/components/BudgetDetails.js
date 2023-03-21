@@ -14,10 +14,10 @@ function BudgetDetails ( {currentUser , currentBudget, budgets, onDeleteBudget})
   ];
 
   const priority = [
-    { id: 1, name: "Fixed"},
-    {id: 2, name: "High"},
-    {id: 3, name: "Medium"},
-    {id: 4, name: "Low"}
+    { id: 0, name: "Fixed"},
+    {id: 1, name: "High"},
+    {id: 2, name: "Medium"},
+    {id: 3, name: "Low"}
   ]
 
   console.log(budgets);
@@ -50,8 +50,8 @@ const surpDef = (168 - budgetHours)
           <ul>
             {budgetCommits.map((commitment) => (
               <li key={commitment.id}>
-                <p>{commitment.commitment_name}</p>
-                <p>{commitment.priority}</p>
+                <h3>{commitment.commitment_name}</h3>
+                <p>Priority: {priority.find(p => p.id === commitment.priority)?.name}</p>
                 <p>{commitment.commitment_hours}</p>
               </li>
             ))}
