@@ -17,6 +17,11 @@ class BudgetsController < ApplicationController
         render json: budget_names.uniq, status: :ok
     end
 
+    def current_budget
+        budgets = Budget.where(budget_name: params[:budget_name])
+        render json: budgets, status: :ok
+    end
+
     def show
         budget = find_budget
         render json: budget, status: :ok

@@ -5,20 +5,15 @@ import LoginPage from "./components/LoginPage";
 import SignUpPage from "./components/SignupPage";
 import Home from "./components/Home";
 import NewBudget from "./components/NewBudget";
+import BudgetDetails from "./components/BudgetDetails";
 
 function App() {
-  const [count, setCount] = useState(0);
 
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState('');
   const [budgets, setBudgets] = useState([]);
   const [budgetList, setBudgetList] = useState([]);
-
-  // useEffect(() => {
-  //   fetch("/hello")
-  //     .then((r) => r.json())
-  //     .then((data) => setCount(data.count));
-  // }, []);
+  const [currentBudget, setCurrentBudget] = useState('');
 
   //Auth fetch to determine if user is logged in and set if yes
   useEffect(() => {
@@ -54,6 +49,11 @@ function App() {
     setCurrentUser(user)
   }
 
+  const onDeleteBudget = (currentUserId) => {
+    const updatedBudgets = budgets.filter((budget) => budget.user_id !== currentUserId)
+    setBudgetList(updatedBudgets)
+  }
+
   return (
     <BrowserRouter>
       <div className="App">
@@ -61,7 +61,9 @@ function App() {
           <Route path="/home">
             <Home
             budgets={budgets}
-            budgetList={budgetList}/>
+            budgetList={budgetList}
+            setCurrentBudget={setCurrentBudget}
+            currentBudget={currentBudget}/>
           </Route>
           <Route path="/login">
             <LoginPage handleUserLogin={handleUserLogin}/>
@@ -72,8 +74,12 @@ function App() {
           <Route path="/newbudget">
             <NewBudget currentUser={currentUser}/>
           </Route>
-          <Route path="/budgetdeet">
-            <h1>Budget</h1>
+          <Route path="/:budget">
+            <BudgetDetails
+            currentUser={currentUser}
+            currentBudget={currentBudget}
+            budgets={budgets}
+            onDeleteBudget={onDeleteBudget}/>
           </Route>
         </Switch>
       </div>
