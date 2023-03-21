@@ -1,7 +1,7 @@
 import React from "react";
 // import BudgetCard from "./BudgetCard";
 import {Link} from 'react-router-dom';
-import { List } from "semantic-ui-react";
+import { List , Button } from "semantic-ui-react";
 
 
 
@@ -12,11 +12,14 @@ function Home({budgets, budgetList}) {
 
 
     const budgetlist = budgetList.map((budget) => (
-        <List.Item>
-            {budget}
-        </List.Item>
+       <>
+       <Link to="/budgetdeet">
+            <List.Item>
+                {budget}
+            </List.Item>
+        </Link>
+        </>
     ))
-   
 
 
 
@@ -28,6 +31,7 @@ function Home({budgets, budgetList}) {
                 {budgetlist}
             </List>
         </div>
+        <Button as={Link} to ="/newbudget">Create New Budget</Button>
         </>
     )
 }
