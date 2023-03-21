@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import SignUpPage from "./components/SignupPage";
 import Home from "./components/Home";
+import NewBudget from "./components/NewBudget";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -68,8 +69,11 @@ function App() {
           <Route path="/signup">
             <SignUpPage/>
           </Route>
-          <Route path="/home">
-            <h1>Page Count: {count}</h1>
+          <Route path="/newbudget">
+            <NewBudget currentUser={currentUser}/>
+          </Route>
+          <Route path="/budgetdeet">
+            <h1>Budget</h1>
           </Route>
         </Switch>
       </div>

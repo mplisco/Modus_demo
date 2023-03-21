@@ -24,7 +24,9 @@ function SignUpPage() {
             if(res.status === 201) {
                 alert("Sign up successful, please log in")
                 history.push('/login')
-            }
+            } else {
+                res.json().then((errorData)=> alert(errorData.errors))
+                }
         })
     }
 
