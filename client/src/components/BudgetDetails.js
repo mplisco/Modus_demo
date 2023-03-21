@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect }  from "react";
 
 
 function BudgetDetails ( {currentUser , currentBudget, budgets, onDeleteBudget}) {
@@ -14,13 +14,11 @@ function BudgetDetails ( {currentUser , currentBudget, budgets, onDeleteBudget})
   ];
 
   const priority = [
-    { id: 0, name: "Fixed"},
+    {id: 0, name: "Fixed"},
     {id: 1, name: "High"},
     {id: 2, name: "Medium"},
     {id: 3, name: "Low"}
   ]
-
-  console.log(budgets);
 
   const categoryBudgetCommits = categories.map((category) => {
     const budgetCommits = budgets.filter(

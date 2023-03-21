@@ -2,7 +2,7 @@ import React from "react";
 import { Menu } from "semantic-ui-react"
 import {Link, useHistory} from 'react-router-dom'
 
-import toplogo from "./ModusLogo - Light.png"
+import toplogo from "../assets/ModusLogo - Light.png"
 
 function Header({ currentUser }) {
     const history = useHistory();
@@ -36,10 +36,9 @@ function Header({ currentUser }) {
                     <Menu ui secondary pointing>
                         {currentUser ? home_option :null }
                         {currentUser ? newbudget_option : null}
-                        {currentUser ?  profile_option : login_option}
+                        {currentUser ? profile_option : login_option}
                         {currentUser ? null : signup_option}
                         {currentUser ? logout_option : null}
-                        
                     </Menu>
                 </div>
             </div>
