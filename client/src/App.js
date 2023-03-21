@@ -6,6 +6,7 @@ import SignUpPage from "./components/SignupPage";
 import Home from "./components/Home";
 import NewBudget from "./components/NewBudget";
 import BudgetDetails from "./components/BudgetDetails";
+import Header from "./components/Header";
 
 function App() {
 
@@ -57,6 +58,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
+        <Header currentUser={currentUser}/>
         <Switch>
           <Route path="/home">
             <Home
@@ -72,7 +74,9 @@ function App() {
             <SignUpPage/>
           </Route>
           <Route path="/newbudget">
-            <NewBudget currentUser={currentUser}/>
+            <NewBudget
+            currentUser={currentUser}
+            setCurrentBudget={setCurrentBudget}/>
           </Route>
           <Route path="/:budget">
             <BudgetDetails
