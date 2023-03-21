@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   get '/mybudgets', to: 'budgets#user_budgets'
   get '/home', to: 'budgets#budget_list'
+  get '/currentbudget', to: 'budgets#current_budget'
 
   resources :users, except: [:new, :edit]
   resources :budgets, except: [:new, :edit]

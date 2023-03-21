@@ -3,7 +3,7 @@ import { Button, Form, TextArea , Container, Dropdown } from 'semantic-ui-react'
 import { Redirect, Route, useHistory } from "react-router-dom";
 
 
-function NewBudget ({currentUser , setBudgets}) {
+function NewBudget ({currentUser , setBudgets , setCurrentBudget}) {
     const [budgetName, setBudgetName ] = useState('')
     const history = useHistory();
 
@@ -11,6 +11,8 @@ function NewBudget ({currentUser , setBudgets}) {
         console.log('submitted')
         console.log({budgetName})
         console.log({currentUser})
+        // setCurrentBudget(budgetName)
+
         e.preventDefault();
 
         const newBudget = {
@@ -21,6 +23,8 @@ function NewBudget ({currentUser , setBudgets}) {
             priority: 0
         }
 
+        
+
         fetch("/budgets", {
             method: "POST",
             headers: {
@@ -28,14 +32,15 @@ function NewBudget ({currentUser , setBudgets}) {
             },
             body: JSON.stringify(newBudget),
         })
-        // .then(resp => resp.json())
+    
         .then(res => {
             if(res.status === 201) {
             fetch("/budgets")
             .then((r) => r.json())
             .then((data) => setBudgets(data))
             
-            history.push('/home')
+            // setCurrentBudget(budgetName)
+            history.push(`/home`)
         } else {
             res.json().then((errorData)=> alert(errorData.errors))
             }
