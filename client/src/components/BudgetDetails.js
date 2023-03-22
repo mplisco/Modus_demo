@@ -125,10 +125,14 @@ const editModal = (
   <Modal open={editModalOpen} onClose={() => setEditModalOpen(false)}>
     <Modal.Header>Edit Budget Name</Modal.Header>
     <Modal.Content>
-      <Form onSubmit={() => handleEditFormSubmit()}>
+    <Form onSubmit={(e) => {
+      e.preventDefault();
+      const budgetName = e.target.elements.budgetName.value;
+      handleEditFormSubmit(budgetName);
+    }}>
         <Form.Field>
           <label>New Budget Name</label>
-          <input placeholder="New Budget Name" />
+          <input placeholder="New Budget Name" name="budgetName"/>
         </Form.Field>
         <Button primary type="submit">Submit</Button>
       </Form>
