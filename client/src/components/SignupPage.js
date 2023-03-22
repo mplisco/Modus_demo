@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Redirect, Route, useHistory } from "react-router-dom";
+import { Form , Button } from 'semantic-ui-react'
 
 function SignUpPage() {
     const [username, setUsername] = useState('');
@@ -31,38 +32,43 @@ function SignUpPage() {
     }
 
     return (
-        <div>
-            <form>
-                <div>
-                    <label>Username: </label>
-                    <input type="text" name="username" value={username}
-                    onChange={ (e) => setUsername(e.target.value)}/>
-                </div>
-                <div>
-                    <label>Password: </label>
-                    <input type="password" name="password" value={password}
-                    onChange={ (e) => setPassword(e.target.value)}/>
-                </div>
-                <div>
+    <>
+      <h1>Create an Account</h1>
+      <div class="ui centered grid">
+      <div class="eight wide column">
+          <div class="ui segment">
+            <Form>
+                <Form.Field>
                     <label>First Name: </label>
-                    <input type="text" name="first-name" value={first_name}
+                    <input placeholder="First Name" type="text" name="first-name" value={first_name}
                     onChange={ (e) => setFirstName(e.target.value)}/>
-                </div>
-                <div >
+                </Form.Field>
+                <Form.Field>
                     <label>Last Name: </label>
-                    <input type="text" name="last-name" value={last_name}
+                    <input placeholder="Last Name" type="text" name="last-name" value={last_name}
                     onChange={ (e) => setLastName(e.target.value)}/>
-                </div>
-                <div>
+                </Form.Field>
+                <Form.Field>
                     <label>Email: </label>
-                    <input type="text" name="email" value={email}
+                    <input placeholder="Email Address" type="text" name="email" value={email}
                     onChange={ (e) => setEmail(e.target.value)}/>
-                </div>
-                <div >
-                    <input type="submit" onClick={handleSignUp}/>
-                </div>
-            </form>
+                </Form.Field>
+                <Form.Field>
+                    <label>Username: </label>
+                    <input placeholder="Username" value={username}
+                    onChange={ (e) => setUsername(e.target.value)}/>
+                </Form.Field>
+                <Form.Field>
+                    <label>Password: </label>
+                    <input placeholder="Password" type="password" name="password" value={password}
+                    onChange={ (e) => setPassword(e.target.value)}/>
+                </Form.Field>
+                <Button primary type="submit" onClick={handleSignUp}>Submit</Button>
+            </Form>
         </div>
+        </div>
+    </div>
+    </>
     )
 }
 

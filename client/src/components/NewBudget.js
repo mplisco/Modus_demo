@@ -53,7 +53,7 @@ function NewBudget ({currentUser , setBudgets , setCurrentBudget}) {
         <div class="ui centered grid">
         <div class="eight wide column">
             <div class="ui segment">
-                <Form onSubmit= {handleSubmit}>
+                <Form onSubmit={handleSubmit}>
                     <Form.Field>
                     <label>New Budget Name</label>
                     <input placeholder='New Budget Name' value={budgetName} onChange={(e) => setBudgetName(e.target.value)} />
@@ -62,6 +62,7 @@ function NewBudget ({currentUser , setBudgets , setCurrentBudget}) {
             </div>
         </div>
         </div>
+        <br></br>
         <Button primary type="submit" onClick={handleSubmit}>Submit</Button>
         </>
     )

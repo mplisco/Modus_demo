@@ -68,6 +68,11 @@ function App() {
     setBudgetList(updatedBudgets)
   }
 
+  const onEditBudget = (currentUserId) => {
+    const updatedBudgets = budgets.filter((budget) => budget.user_id !== currentUserId)
+    setBudgetList(updatedBudgets)
+  }
+
   return (
     <BrowserRouter>
       <div className="App">
@@ -75,10 +80,12 @@ function App() {
         <Switch>
           <Route path="/home">
             <Home
+            currentUser={currentUser}
             budgets={budgets}
             budgetList={budgetList}
             setCurrentBudget={setCurrentBudget}
-            currentBudget={currentBudget}/>
+            currentBudget={currentBudget}
+            />
           </Route>
           <Route path="/login">
             <LoginPage handleUserLogin={handleUserLogin}/>
@@ -89,23 +96,28 @@ function App() {
           <Route path="/newbudget">
             <NewBudget
             currentUser={currentUser}
-            setCurrentBudget={setCurrentBudget}/>
+            setCurrentBudget={setCurrentBudget}
+            />
           </Route>
-          <Route path="/:budget">
+          <Route path="/budgets/:budget">
             <BudgetDetails
             currentUser={currentUser}
             currentBudget={currentBudget}
             budgets={budgets}
-            onDeleteBudget={onDeleteBudget}/>
+            onDeleteBudget={onDeleteBudget}
+            setCurrentBudget={setCurrentBudget}
+            onEditBudget={onEditBudget}
+            />
           </Route>
           <Route path="/profile">
             <UserProfile
             currentUser={currentUser}
             onDeleteUser={onDeleteUser}
-            onEditUserProfile={onEditUserProfile}/>
+            onEditUserProfile={onEditUserProfile}
+            setCurrentBudget={setCurrentBudget}/>
           </Route>
-          <Route path='*'>
-            <Redirect to="/home"/>
+          <Route path="/">
+              <Redirect to="/home" />
           </Route>
         </Switch>
       </div>
