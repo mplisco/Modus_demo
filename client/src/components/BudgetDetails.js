@@ -1,6 +1,6 @@
 import React, { useState, useEffect }  from "react";
 import { useHistory } from "react-router-dom";
-import { Button } from 'semantic-ui-react'
+import { Button  , Modal , Form} from 'semantic-ui-react'
 
 
 function BudgetDetails ( {currentUser , currentBudget, budgets, onDeleteBudget}) {
@@ -46,7 +46,7 @@ const surpDef = (168 - budgetHours)
 const handleDelete = async () => {
   console.log('deleted')
   const deleteBudgets = budgets.filter((budget) => budget.budget_name === currentBudget);
-  
+
   try {
     await Promise.all(deleteBudgets.map(async (budget) => {
       console.log(budget)
@@ -70,15 +70,22 @@ const handleDelete = async () => {
   }
 };
 
-
-
-  const deleteButton = <Button negative onClick={handleDelete}>Delete Budget</Button>
+const deleteButton = <Button negative onClick={handleDelete}>Delete Budget</Button>
 
 const handleEdit = () => {
   console.log('edit') }
 
 
 const editButton = <Button primary onClick={handleEdit}>Edit Budget</Button>
+
+const [modalOpen, setModalOpen] = useState(false)
+
+const handleClick = () => {
+  setModalOpen(true);
+}
+
+const handleForm = () => {
+}
 
   return (
     <>
@@ -88,24 +95,39 @@ const editButton = <Button primary onClick={handleEdit}>Edit Budget</Button>
     <div>
       {editButton}{deleteButton}
     </div>
-    <div>
+    <br></br>
+    <div class="ui centered grid">
+      <div class="ten wide column">
       {categoryBudgetCommits.map(({ category, budgetCommits }) => (
         <div key={category.id}>
-          <h2>{category.name}</h2>
+          <div class="ui raised segment" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h2 align="left">{category.name}</h2>
+          <h3 align="right">Hours</h3>
+          </div>
           <ul>
             {budgetCommits.map((commitment) => (
-              <li key={commitment.id}>
+              <li key={commitment.id} onClick={handleClick}>
                 <h3>{commitment.commitment_name}</h3>
                 <p>Priority: {priority.find(p => p.id === commitment.priority)?.name}</p>
-                <p>{commitment.commitment_hours}</p>
+                <p>{commitment.commitment_hours} Hours</p>
+                <Modal open = {modalOpen} onClose = {() => setModalOpen(false)} >
+                <Modal.Header> {commitment.commitment_name} </Modal.Header>
+                  <Modal.Content>
+                    <Form onSubmit={handleForm}>
+                    </Form>
+                    <h3>Hours </h3>
+                    <div class="ui divider"></div>
+                    <h4>Priority </h4>
+                    <h4><span>Something Else</span> <br></br></h4>
+                  </Modal.Content>
+                </Modal>
               </li>
             ))}
           </ul>
         </div>
-        
       ))}
     </div>
-     
+    </div>
     </>
   );
 }

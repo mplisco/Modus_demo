@@ -4,7 +4,7 @@ import { List , Button } from "semantic-ui-react";
 
 
 
-function Home({budgets, budgetList, currentBudget, setCurrentBudget}) {
+function Home({ budgets, budgetList , currentBudget, setCurrentBudget}) {
 
     console.log(budgetList)
     console.log(budgets)
@@ -18,11 +18,11 @@ function Home({budgets, budgetList, currentBudget, setCurrentBudget}) {
 
     const budgetlist = budgetList.map((budget) => (
        <>
-       <Link key={budget} to={`/${budget}`} onClick={handleClick}>
-            <List.Item >
-                {budget}
-            </List.Item>
-        </Link>
+            <Link key={budget} to={`/${budget}`} onClick={handleClick}>
+                <List.Item >
+                    {budget}
+                </List.Item>
+            </Link>
         </>
     ))
 
