@@ -99,7 +99,7 @@ function App() {
             setCurrentBudget={setCurrentBudget}
             />
           </Route>
-          <Route path="/:budget">
+          <Route path="/budgets/:budget">
             <BudgetDetails
             currentUser={currentUser}
             currentBudget={currentBudget}
@@ -116,8 +116,8 @@ function App() {
             onEditUserProfile={onEditUserProfile}
             setCurrentBudget={setCurrentBudget}/>
           </Route>
-          <Route path='*'>
-            <Redirect to="/home"/>
+          <Route path="/">
+              <Redirect to="/home" />
           </Route>
         </Switch>
       </div>

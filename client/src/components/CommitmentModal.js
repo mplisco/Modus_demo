@@ -46,6 +46,5 @@ function CommitmentModal({ open, commitment, priority, onClose, onFormSubmit }) 
       </Modal>
     );
   }
-  
 
 export default CommitmentModal;

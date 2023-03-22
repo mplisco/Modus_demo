@@ -18,7 +18,7 @@ function Home({ budgets, budgetList , currentBudget, setCurrentBudget}) {
 
     const budgetlist = budgetList.map((budget) => (
        <>
-            <Link key={budget} to={`/${budget}`} onClick={handleClick}>
+            <Link key={budget} to={`/budgets/${budget}`} onClick={handleClick}>
                 <List.Item >
                     {budget}
                 </List.Item>
