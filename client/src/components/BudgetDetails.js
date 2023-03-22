@@ -4,7 +4,7 @@ import { Button  , Modal , Form} from 'semantic-ui-react';
 import CommitmentModal from "./CommitmentModal";
 
 
-function BudgetDetails ( {currentUser , currentBudget, setCurrentBudget , budgets, onDeleteBudget}) {
+function BudgetDetails ( {currentUser , currentBudget, setCurrentBudget , budgets, onDeleteBudget , onEditBudget}) {
 
   const history = useHistory();
   //Defining Categories for Budget Presentation
@@ -87,16 +87,39 @@ const handleEdit = () => {
   setEditModalOpen(true);
 }
 
-const handleEditFormSubmit = (budgetName) => {
-  const updatedBudget = {
-    ...currentBudget,
-    budget_name: budgetName
-  };
-  //patch request to database
+const handleEditFormSubmit = async (budgetName) => {
+  const editBudgets = budgets.filter((budget) => budget.budget_name === currentBudget);
 
-  setEditModalOpen(false);
-  setCurrentBudget(updatedBudget);
-}
+  try {
+    await Promise.all(editBudgets.map(async (budget) => {
+      console.log(budget)
+      const response = await fetch(`/budgets/${budget.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({budget_name: budgetName})
+      })
+      if (response.ok) {
+        onEditBudget(budget.id);
+      } else {
+        throw new Error(`Failed to edit budget: ${budget.id}`);
+      }
+    }));
+
+    const updatedBudget = {
+      ...currentBudget,
+      budget_name: budgetName
+    };
+    setCurrentBudget(updatedBudget)
+    setEditModalOpen(false);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
 
 const editModal = (
   <Modal open={editModalOpen} onClose={() => setEditModalOpen(false)}>
@@ -131,7 +154,7 @@ const handleFormSubmit = (hours, priority, commitmentId) => {
   // code to update commitment with new hours and priority
 };
 
-  return (
+return (
     <>
     {editModal}
     <h1>{currentBudget}</h1>

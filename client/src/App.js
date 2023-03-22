@@ -68,6 +68,11 @@ function App() {
     setBudgetList(updatedBudgets)
   }
 
+  const onEditBudget = (currentUserId) => {
+    const updatedBudgets = budgets.filter((budget) => budget.user_id !== currentUserId)
+    setBudgetList(updatedBudgets)
+  }
+
   return (
     <BrowserRouter>
       <div className="App">
@@ -101,6 +106,7 @@ function App() {
             budgets={budgets}
             onDeleteBudget={onDeleteBudget}
             setCurrentBudget={setCurrentBudget}
+            onEditBudget={onEditBudget}
             />
           </Route>
           <Route path="/profile">
