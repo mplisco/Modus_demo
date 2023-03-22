@@ -1,6 +1,7 @@
 import React, { useState, useEffect }  from "react";
 import { useHistory } from "react-router-dom";
-import { Button  , Modal , Form} from 'semantic-ui-react'
+import { Button  , Modal , Form} from 'semantic-ui-react';
+import CommitmentModal from "./CommitmentModal";
 
 
 function BudgetDetails ( {currentUser , currentBudget, budgets, onDeleteBudget}) {
@@ -62,8 +63,9 @@ const handleDelete = async () => {
       } else {
         throw new Error(`Failed to delete budget ${budget.id}`);
       }
-    }))
-    console.log('all budgets deleted');
+    })
+    )
+    console.log('budget successfully deleted');
     history.push('/home');
   } catch (error) {
     console.error(error);
@@ -72,20 +74,26 @@ const handleDelete = async () => {
 
 const deleteButton = <Button negative onClick={handleDelete}>Delete Budget</Button>
 
+//TO-DO - Edit Budget Name
 const handleEdit = () => {
   console.log('edit') }
 
 
 const editButton = <Button primary onClick={handleEdit}>Edit Budget</Button>
 
-const [modalOpen, setModalOpen] = useState(false)
+const [modalOpen, setModalOpen] = useState({})
 
-const handleClick = () => {
-  setModalOpen(true);
+const handleClick = (commitmentId) => {
+  setModalOpen((prev) => ({...prev, [commitmentId]: true}));
 }
 
-const handleForm = () => {
-}
+const handleClose = (commitmentId) => {
+  setModalOpen((prev) => ({ ...prev, [commitmentId]: false }));
+};
+
+const handleFormSubmit = (hours, priority, commitmentId) => {
+  // code to update commitment with new hours and priority
+};
 
   return (
     <>
@@ -93,34 +101,37 @@ const handleForm = () => {
     <h2>Total Budget Hours: {budgetHours} / 168 </h2>
     <h3>Surplus/(Deficit): {surpDef}</h3>
     <div>
-      {editButton}{deleteButton}
+      {editButton}
+      {deleteButton}
     </div>
     <br></br>
     <div class="ui centered grid">
       <div class="ten wide column">
       {categoryBudgetCommits.map(({ category, budgetCommits }) => (
         <div key={category.id}>
-          <div class="ui raised segment" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div class="ui raised segment"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center"
+            }}
+            >
           <h2 align="left">{category.name}</h2>
           <h3 align="right">Hours</h3>
           </div>
           <ul>
             {budgetCommits.map((commitment) => (
-              <li key={commitment.id} onClick={handleClick}>
+              <li key={commitment.id} onClick={()=> handleClick(commitment.id)}>
                 <h3>{commitment.commitment_name}</h3>
                 <p>Priority: {priority.find(p => p.id === commitment.priority)?.name}</p>
                 <p>{commitment.commitment_hours} Hours</p>
-                <Modal open = {modalOpen} onClose = {() => setModalOpen(false)} >
-                <Modal.Header> {commitment.commitment_name} </Modal.Header>
-                  <Modal.Content>
-                    <Form onSubmit={handleForm}>
-                    </Form>
-                    <h3>Hours </h3>
-                    <div class="ui divider"></div>
-                    <h4>Priority </h4>
-                    <h4><span>Something Else</span> <br></br></h4>
-                  </Modal.Content>
-                </Modal>
+                <CommitmentModal
+                  open={modalOpen[commitment.id]}
+                  commitment={commitment}
+                  priority={priority}
+                  onClose={()=> handleClose(commitment.id)}
+                  onFormSubmit={handleFormSubmit}
+                />
               </li>
             ))}
           </ul>

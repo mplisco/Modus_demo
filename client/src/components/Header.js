@@ -22,12 +22,12 @@ function Header({ currentUser }) {
         })
     }
 
-    const login_option = <Menu.Item as={Link} to ="/login" className="basic-button">Login</Menu.Item>
-    const profile_option = <Menu.Item as={Link} to ="/profile" className="basic-button">Profile</Menu.Item>
-    const signup_option = <Menu.Item as={Link} to ="/signup" className="basic-button">Sign-up</Menu.Item>
-    const logout_option = <Menu.Item as={Link} onClick={handleLogout} position="right" className="basic-button">Logout</Menu.Item>
-    const newbudget_option = <Menu.Item as={Link} to ="/newbudget" className="basic-button">New Budget</Menu.Item>
-    const home_option = <Menu.Item as={Link} to ="/home" className="basic-button">Home</Menu.Item>
+    const login_option = <Menu.Item as={Link} to ="/login" class="active item">Login</Menu.Item>
+    const profile_option = <Menu.Item as={Link} to ="/profile" class="item">Profile</Menu.Item>
+    const signup_option = <Menu.Item as={Link} to ="/signup" class="item">Sign-up</Menu.Item>
+    const logout_option = <Menu.Item as={Link} onClick={handleLogout} position="right" class="item">Logout</Menu.Item>
+    const newbudget_option = <Menu.Item as={Link} to ="/newbudget" class="item">New Budget</Menu.Item>
+    const home_option = <Menu.Item as={Link} to ="/home" lass="active item">Home</Menu.Item>
 
 
     return (
@@ -35,7 +35,7 @@ function Header({ currentUser }) {
             <div className="basic-box">
                 <img className="mx-auto border-black border-2 border-solid m-4" alt="Modus" src={toplogo} />
                 <div className="border-2 border-solid border-black p-3 max-w-max mx-auto">
-                    <Menu ui secondary pointing>
+                    <Menu class="ui secondary pointing menu">
                         {currentUser ? home_option : null }
                         {currentUser ? newbudget_option : null}
                         {currentUser ? profile_option : login_option}

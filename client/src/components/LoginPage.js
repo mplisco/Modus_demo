@@ -50,7 +50,7 @@ function LoginPage({ handleUserLogin, currentUser }) {
               <Button primary type="submit" onClick={handleSubmit}>Submit</Button>
               </Form>
           </div>
-      </div> 
+      </div>
       </div>
     </>
   )
