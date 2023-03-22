@@ -28,12 +28,13 @@ function Home({budgets, budgetList, currentBudget, setCurrentBudget}) {
 
     return (
         <>
-        <h1>My Budgets</h1>
+        <h1>My Weekly Time Budgets</h1>
         <div>
             <List>
                 {budgetlist}
             </List>
         </div>
+        <br></br>
         <Button primary as={Link} to ="/newbudget">Create New Budget</Button>
         </>
     )

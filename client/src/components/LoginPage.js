@@ -32,23 +32,26 @@ function LoginPage({ handleUserLogin, currentUser }) {
 
   return (
     <>
-    <div>
-      <form>
-        <div>
-          <label>Username: </label>
-          <input type="text" name="username" value={username}
-            onChange={ (e) => setUsername(e.target.value) }/>
-        </div>
-        <div id="password-field" className="basic-box">
-          <label>Password: </label>
-          <input type="password" name="password" className="basic-box max-w-max" value={password}
-            onChange={ (e) => setPassword(e.target.value) }/>
-        </div>
-        <div>
-          <input type="submit" onClick={handleSubmit}/>
-        </div>
-      </form>
-    </div>
+      <h1>User Login</h1>
+      <div class="ui centered grid">
+      <div class="eight wide column">
+          <div class="ui segment">
+              <Form>
+                <Form.Field>
+                  <label>Username: </label>
+                  <input placeholder="Username" value={username}
+                    onChange={(e) => setUsername(e.target.value)}/>
+                </Form.Field>
+                <Form.Field>
+                  <label>Password: </label>
+                  <input placeholder="Password" type="password" name="password" value={password}
+                    onChange={ (e) => setPassword(e.target.value) }/>
+                </Form.Field>
+              <Button primary type="submit" onClick={handleSubmit}>Submit</Button>
+              </Form>
+          </div>
+      </div> 
+      </div>
     </>
   )
 }
