@@ -31,10 +31,10 @@ function Header({ currentUser }) {
     return (
         <div className="max-w-max mx-auto">
             <div className="basic-box">
-                <img className="mx-auto border-black border-2 border-solid m-4" alt="PupHub" src={toplogo} />
+                <img className="mx-auto border-black border-2 border-solid m-4" alt="Modus" src={toplogo} />
                 <div className="border-2 border-solid border-black p-3 max-w-max mx-auto">
                     <Menu ui secondary pointing>
-                        {currentUser ? home_option :null }
+                        {currentUser ? home_option : null }
                         {currentUser ? newbudget_option : null}
                         {currentUser ? profile_option : login_option}
                         {currentUser ? null : signup_option}

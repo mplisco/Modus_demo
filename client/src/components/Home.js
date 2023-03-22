@@ -15,11 +15,11 @@ function Home({budgets, budgetList, currentBudget, setCurrentBudget}) {
         setCurrentBudget(budgetName)
         console.log(currentBudget)
     }
-    
+
     const budgetlist = budgetList.map((budget) => (
        <>
        <Link key={budget} to={`/${budget}`} onClick={handleClick}>
-            <List.Item>
+            <List.Item >
                 {budget}
             </List.Item>
         </Link>
@@ -34,7 +34,7 @@ function Home({budgets, budgetList, currentBudget, setCurrentBudget}) {
                 {budgetlist}
             </List>
         </div>
-        <Button as={Link} to ="/newbudget">Create New Budget</Button>
+        <Button primary as={Link} to ="/newbudget">Create New Budget</Button>
         </>
     )
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect }  from "react";
+import { Button } from 'semantic-ui-react'
 
 
 function BudgetDetails ( {currentUser , currentBudget, budgets, onDeleteBudget}) {
@@ -36,11 +37,23 @@ const budgetHours =  budgets
 
 const surpDef = (168 - budgetHours)
 
+const handleDelete = () => {
+  console.log('deleted') }
+
+const handleEdit = () => {
+  console.log('edit') }
+
+const deleteButton = <Button negative onClick={handleDelete}>Delete Budget</Button>
+const editButton = <Button primary onClick={handleEdit}>Edit Budget</Button>
+
   return (
     <>
     <h1>{currentBudget}</h1>
     <h2>Total Budget Hours: {budgetHours} / 168 </h2>
     <h3>Surplus/(Deficit): {surpDef}</h3>
+    <div>
+      {editButton}{deleteButton} 
+    </div>
     <div>
       {categoryBudgetCommits.map(({ category, budgetCommits }) => (
         <div key={category.id}>
@@ -55,8 +68,10 @@ const surpDef = (168 - budgetHours)
             ))}
           </ul>
         </div>
+        
       ))}
     </div>
+     
     </>
   );
 }

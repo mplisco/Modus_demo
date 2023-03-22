@@ -62,7 +62,7 @@ function NewBudget ({currentUser , setBudgets , setCurrentBudget}) {
             </div>
         </div>
         </div>
-        <Button type="submit" onClick={handleSubmit}>Submit</Button>
+        <Button primary type="submit" onClick={handleSubmit}>Submit</Button>
         </>
     )
 }
