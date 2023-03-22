@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import profileIcon from '../assets/profileIcon.png';
 import { Form , Button } from 'semantic-ui-react';
-function UserProfile({currentUser, onDeleteUser, onEditUserProfile , setCurrentBudget}) {
+function UserProfile({currentUser, onDeleteUser, onEditUserProfile }) {
 
     const [editFormIsOpen, setEditFormIsOpen] = useState(false)
     const [profilePhoto, setProfilePhoto] = useState(profileIcon)
@@ -78,7 +78,7 @@ function UserProfile({currentUser, onDeleteUser, onEditUserProfile , setCurrentB
             fetch(`users/${user_id}`,
             { method: 'DELETE'})
             .then(() => onDeleteUser(id))
-            alert("your account has been deactivated")
+            alert("Your account has been deactivated")
         }
 
         history.push("/signup")

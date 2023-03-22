@@ -27,7 +27,7 @@ function Header({ currentUser }) {
     const signup_option = <Menu.Item as={Link} to ="/signup" class="item">Sign-up</Menu.Item>
     const logout_option = <Menu.Item as={Link} onClick={handleLogout} position="right" class="item">Logout</Menu.Item>
     const newbudget_option = <Menu.Item as={Link} to ="/newbudget" class="item">New Budget</Menu.Item>
-    const home_option = <Menu.Item as={Link} to ="/home" lass="active item">Home</Menu.Item>
+    const home_option = <Menu.Item as={Link} to ="/home" class="active item">Home</Menu.Item>
 
 
     return (
