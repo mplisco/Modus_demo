@@ -14,10 +14,12 @@ function Header({ currentUser }) {
             headers: {
               "Content-Type": "application/json"
             }
-        }).then(() => alert("You've been successfully logged out"))
-        
-        window.location.reload()
-        return false
+        }).then(() => {
+            alert("You've been successfully logged out");
+            history.push("/login");
+            }).catch(error => {
+            console.error(error);
+        })
     }
 
     const login_option = <Menu.Item as={Link} to ="/login" className="basic-button">Login</Menu.Item>
