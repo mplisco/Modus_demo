@@ -49,20 +49,20 @@ function NewBudget ({currentUser , setBudgets , setCurrentBudget}) {
 
     return (
         <>
-        <h1>New Budget Page</h1>
+        <h1>Create New Budget</h1>
         <div class="ui centered grid">
         <div class="eight wide column">
             <div class="ui segment">
                 <Form onSubmit= {handleSubmit}>
                     <Form.Field>
-                    <label>Budget Name</label>
-                    <input placeholder='Budget Name' value={budgetName} onChange={(e) => setBudgetName(e.target.value)} />
+                    <label>New Budget Name</label>
+                    <input placeholder='New Budget Name' value={budgetName} onChange={(e) => setBudgetName(e.target.value)} />
                     </Form.Field>
                 </Form>
             </div>
         </div>
         </div>
-        <Button type="submit" onClick={handleSubmit}>Submit</Button>
+        <Button primary type="submit" onClick={handleSubmit}>Submit</Button>
         </>
     )
 }

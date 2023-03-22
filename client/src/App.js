@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"
 import './App.css';
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route , Redirect} from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import SignUpPage from "./components/SignupPage";
 import Home from "./components/Home";
 import NewBudget from "./components/NewBudget";
 import BudgetDetails from "./components/BudgetDetails";
 import Header from "./components/Header";
+import UserProfile from "./components/UserProfile";
 
 function App() {
 
@@ -50,6 +51,18 @@ function App() {
     setCurrentUser(user)
   }
 
+   //deactivate user from db
+   const onDeleteUser = (id) => {
+    const updatedUser = users.filter((currentUser) => currentUser.id !== id)
+    setCurrentUser(updatedUser)
+  }
+
+   //edit user profile
+  const onEditUserProfile = (modifiedUser) => {
+    const updateUser = users.map(user => currentUser.id === user.id ? modifiedUser : user)
+    setCurrentUser(updateUser)
+  }
+
   const onDeleteBudget = (currentUserId) => {
     const updatedBudgets = budgets.filter((budget) => budget.user_id !== currentUserId)
     setBudgetList(updatedBudgets)
@@ -84,6 +97,15 @@ function App() {
             currentBudget={currentBudget}
             budgets={budgets}
             onDeleteBudget={onDeleteBudget}/>
+          </Route>
+          <Route path="/profile">
+            <UserProfile
+            currentUser={currentUser}
+            onDeleteUser={onDeleteUser}
+            onEditUserProfile={onEditUserProfile}/>
+          </Route>
+          <Route path='*'>
+            <Redirect to="/home"/>
           </Route>
         </Switch>
       </div>

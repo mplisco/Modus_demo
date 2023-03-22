@@ -2,7 +2,7 @@ import React from "react";
 import { Menu } from "semantic-ui-react"
 import {Link, useHistory} from 'react-router-dom'
 
-import toplogo from "./ModusLogo - Light.png"
+import toplogo from "../assets/ModusLogo - Light.png"
 
 function Header({ currentUser }) {
     const history = useHistory();
@@ -14,10 +14,12 @@ function Header({ currentUser }) {
             headers: {
               "Content-Type": "application/json"
             }
-        }).then(() => alert("You've been successfully logged out"))
-        
-        window.location.reload()
-        return false
+        }).then(() => {
+            alert("You've been successfully logged out");
+            history.push("/login");
+            }).catch(error => {
+            console.error(error);
+        })
     }
 
     const login_option = <Menu.Item as={Link} to ="/login" className="basic-button">Login</Menu.Item>
@@ -31,15 +33,14 @@ function Header({ currentUser }) {
     return (
         <div className="max-w-max mx-auto">
             <div className="basic-box">
-                <img className="mx-auto border-black border-2 border-solid m-4" alt="PupHub" src={toplogo} />
+                <img className="mx-auto border-black border-2 border-solid m-4" alt="Modus" src={toplogo} />
                 <div className="border-2 border-solid border-black p-3 max-w-max mx-auto">
                     <Menu ui secondary pointing>
-                        {currentUser ? home_option :null }
+                        {currentUser ? home_option : null }
                         {currentUser ? newbudget_option : null}
-                        {currentUser ?  profile_option : login_option}
+                        {currentUser ? profile_option : login_option}
                         {currentUser ? null : signup_option}
                         {currentUser ? logout_option : null}
-                        
                     </Menu>
                 </div>
             </div>
