@@ -4,7 +4,7 @@ import { Button  , Modal , Form} from 'semantic-ui-react';
 import CommitmentModal from "./CommitmentModal";
 
 
-function BudgetDetails ( {currentUser , currentBudget, budgets, onDeleteBudget}) {
+function BudgetDetails ( {currentUser , currentBudget, setCurrentBudget , budgets, onDeleteBudget}) {
 
   const history = useHistory();
   //Defining Categories for Budget Presentation
@@ -43,7 +43,10 @@ const budgetHours =  budgets
 
 const surpDef = (168 - budgetHours)
 
-//Delete Button and Delete Function
+//Delete Button and Delete Handler Function
+
+
+
 const handleDelete = async () => {
   console.log('deleted')
   const deleteBudgets = budgets.filter((budget) => budget.budget_name === currentBudget);
@@ -74,21 +77,54 @@ const handleDelete = async () => {
 
 const deleteButton = <Button negative onClick={handleDelete}>Delete Budget</Button>
 
-//TO-DO - Edit Budget Name
-const handleEdit = () => {
-  console.log('edit') }
 
+//TO-DO - Edit Budget Name
+
+
+const [editModalOpen, setEditModalOpen] = useState(false)
+
+const handleEdit = () => {
+  setEditModalOpen(true);
+}
+
+const handleEditFormSubmit = (budgetName) => {
+  const updatedBudget = {
+    ...currentBudget,
+    budget_name: budgetName
+  };
+  //patch request to database
+
+  setEditModalOpen(false);
+  setCurrentBudget(updatedBudget);
+}
+
+const editModal = (
+  <Modal open={editModalOpen} onClose={() => setEditModalOpen(false)}>
+    <Modal.Header>Edit Budget Name</Modal.Header>
+    <Modal.Content>
+      <Form onSubmit={() => handleEditFormSubmit()}>
+        <Form.Field>
+          <label>New Budget Name</label>
+          <input placeholder="New Budget Name" />
+        </Form.Field>
+        <Button primary type="submit">Submit</Button>
+      </Form>
+    </Modal.Content>
+  </Modal>
+)
 
 const editButton = <Button primary onClick={handleEdit}>Edit Budget</Button>
 
-const [modalOpen, setModalOpen] = useState({})
+//Edit Commitment Modal and Form -- See also CommitmentModal
+
+const [commitModalOpen, setCommitModalOpen] = useState({})
 
 const handleClick = (commitmentId) => {
-  setModalOpen((prev) => ({...prev, [commitmentId]: true}));
+  setCommitModalOpen((prev) => ({...prev, [commitmentId]: true}));
 }
 
 const handleClose = (commitmentId) => {
-  setModalOpen((prev) => ({ ...prev, [commitmentId]: false }));
+  setCommitModalOpen((prev) => ({ ...prev, [commitmentId]: false }));
 };
 
 const handleFormSubmit = (hours, priority, commitmentId) => {
@@ -97,6 +133,7 @@ const handleFormSubmit = (hours, priority, commitmentId) => {
 
   return (
     <>
+    {editModal}
     <h1>{currentBudget}</h1>
     <h2>Total Budget Hours: {budgetHours} / 168 </h2>
     <h3>Surplus/(Deficit): {surpDef}</h3>
@@ -126,7 +163,7 @@ const handleFormSubmit = (hours, priority, commitmentId) => {
                 <p>Priority: {priority.find(p => p.id === commitment.priority)?.name}</p>
                 <p>{commitment.commitment_hours} Hours</p>
                 <CommitmentModal
-                  open={modalOpen[commitment.id]}
+                  open={commitModalOpen[commitment.id]}
                   commitment={commitment}
                   priority={priority}
                   onClose={()=> handleClose(commitment.id)}

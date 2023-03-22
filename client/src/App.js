@@ -100,6 +100,7 @@ function App() {
             currentBudget={currentBudget}
             budgets={budgets}
             onDeleteBudget={onDeleteBudget}
+            setCurrentBudget={setCurrentBudget}
             />
           </Route>
           <Route path="/profile">
