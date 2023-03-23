@@ -64,22 +64,39 @@ function UserProfile({currentUser, onDeleteUser, onEditUserProfile }) {
     }
 
     const editForm = (
-        <form className='edit-profile-form' onSubmit={handleEditFormSubmit}>
-            <input type="text" placeholder="first name" name="first_name" value={first_name} onChange={handleFormData}/>
-            <br />
-            <input type="text" placeholder="last name" name="last_name" value={last_name} onChange={handleFormData}/>
-            <br />
-            <input type='email' placeholder="email" name="email" value={email} onChange={handleFormData}/>
-            <br />
-            <input type='username' placeholder="user name" name="username" value={username} onChange={handleFormData}/>
-            <br />
-            <input required type='password' placeholder="password" name="password" value={password} onChange={handleFormData}/>
-            <br />
-            <input type="file" accept='image/*' name="photo" id="profilePhotoInput" />
-            <br/>
-            <Button secondary type="button" className="cancel-button" onClick={() => setEditFormIsOpen(false)}>Cancel</Button>
-            <Button primary type="submit">Save</Button>
-        </form>
+        <div class="ui centered grid">
+            <div class="eight wide column">
+            <div class="ui segment">
+                <Form onSubmit={handleEditFormSubmit}>
+                    <Form.Field>
+                        <img class="ui centered small circular image" src={profileIcon} alt="profile" />
+                    </Form.Field>
+                    <Form.Field>
+                        <label>First Name: </label>
+                        <input type="text" placeholder="First Name" name="first_name" value={first_name} onChange={handleFormData}/>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>Last Name: </label>
+                        <input type="text" placeholder="Last Name" name="last_name" value={last_name} onChange={handleFormData}/>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>Email Address: </label>
+                        <input type='email' placeholder="Email" name="email" value={email} onChange={handleFormData}/>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>Username: </label>
+                        <input placeholder="Username" name="username" value={username} onChange={handleFormData}/>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>Password: </label>
+                        <input required type='password' placeholder="password" name="password" value={password} onChange={handleFormData}/>
+                    </Form.Field>
+                    <Button secondary type="button" className="cancel-button" onClick={() => setEditFormIsOpen(false)}>Cancel</Button>
+                    <Button primary type="submit">Save</Button>
+                </Form>
+            </div>
+            </div>
+        </div>
     )
 
     const editButton = <Button secondary onClick={()=> setEditFormIsOpen(true)}>Edit</Button>
@@ -89,16 +106,25 @@ function UserProfile({currentUser, onDeleteUser, onEditUserProfile }) {
     const displayForm = (
         <div class="ui centered grid">
             <div class="eight wide column">
-            <div class="ui segment" align="center">
-                <div className="profile-info">
-                    <div className="profile-photo" role="button" title="Click to edit photo">
-                        <img src={profileIcon} alt="profile" />
-                    </div>
-                    <p className="name">Name: {first_name} {last_name}</p>
-                    <p className="email">Email: {email}</p>
-                    <p className="username">Username: {username}</p>
+            <div class="ui segment">
+                <Form>
+                    <Form.Field>
+                        <img class="ui centered small circular image" src={profileIcon} alt="profile" />
+                    </Form.Field>
+                    <Form.Field>
+                        <label> Name: </label>
+                        <p>{first_name} {last_name}</p>
+                    </Form.Field>
+                    <Form.Field>
+                        <label> Email: </label>
+                        <p className="email">{email}</p>
+                    </Form.Field>
+                    <Form.Field>
+                        <label> Username: </label>
+                        <p className="username">{username}</p>
+                    </Form.Field>
                     {editButton}{deleteButton}
-                </div>
+                </Form>
             </div>
             </div>
         </div>
@@ -106,11 +132,12 @@ function UserProfile({currentUser, onDeleteUser, onEditUserProfile }) {
 
     const {id} = currentUser
 
-   
+    const header = "User Profile"
+    const editHeader = "Edit User Profile"
 
 return (
-           <>
-           <h1>User Profile</h1>
+        <>
+           <h1>{editFormIsOpen ? editHeader : header}</h1>
            <div className="max-w-max mx-auto">
                 <div className='basic-box'>
                     <div className="profile-info">
@@ -118,7 +145,7 @@ return (
                     </div>
                 </div>
             </div>
-            </>
+        </>
         )
 }
 
