@@ -4,7 +4,7 @@ import { Button  , Modal , Form} from 'semantic-ui-react';
 import CommitmentModal from "./CommitmentModal";
 
 
-function BudgetDetails ( {currentUser , currentBudget, setCurrentBudget , budgets, onDeleteBudget , onEditBudget}) {
+function BudgetDetails ( {currentUser , currentBudget, setCurrentBudget , budgets, setBudgets , onDeleteBudget , onEditBudget}) {
 
   const history = useHistory();
   //Defining Categories for Budget Presentation
@@ -18,7 +18,7 @@ function BudgetDetails ( {currentUser , currentBudget, setCurrentBudget , budget
   ];
 
 //Defining Priorities for Budget Presentation
-  const priority = [
+  const priorityArray = [
     {id: 0, name: "Fixed"},
     {id: 1, name: "High"},
     {id: 2, name: "Medium"},
@@ -144,18 +144,12 @@ const editButton = <Button primary onClick={handleEdit}>Edit Budget</Button>
 
 //Edit Commitment Modal and Form -- See also CommitmentModal
 
-const [commitModalOpen, setCommitModalOpen] = useState({})
 
-const handleClick = (commitmentId) => {
-  setCommitModalOpen((prev) => ({...prev, [commitmentId]: true}));
-}
+const [selectedCommitmentId, setSelectedCommitmentId] = useState(null);
 
-const handleClose = (commitmentId) => {
-  setCommitModalOpen((prev) => ({ ...prev, [commitmentId]: false }));
-};
 
-const handleFormSubmit = (hours, priority, commitmentId) => {
-  // code to update commitment with new hours and priority
+const handleCommitmentClick = (commitmentId) => {
+  setSelectedCommitmentId(commitmentId);
 };
 
 return (
@@ -177,7 +171,7 @@ return (
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "center"
+            alignItems: "center",
             }}
             >
           <h2 align="left">{category.name}</h2>
@@ -185,17 +179,10 @@ return (
           </div>
           <ul>
             {budgetCommits.map((commitment) => (
-              <li key={commitment.id} onClick={()=> handleClick(commitment.id)}>
+              <li key={commitment.id} onClick={()=> handleCommitmentClick(commitment.id)}>
                 <h3>{commitment.commitment_name}</h3>
-                <p>Priority: {priority.find(p => p.id === commitment.priority)?.name}</p>
+                <p>Priority: {priorityArray.find(p => p.id === commitment.priority)?.name}</p>
                 <p>{commitment.commitment_hours} Hours</p>
-                <CommitmentModal
-                  open={commitModalOpen[commitment.id]}
-                  commitment={commitment}
-                  priority={priority}
-                  onClose={()=> handleClose(commitment.id)}
-                  onFormSubmit={handleFormSubmit}
-                />
               </li>
             ))}
           </ul>
@@ -203,6 +190,15 @@ return (
       ))}
     </div>
     </div>
+        {selectedCommitmentId && (
+          <CommitmentModal
+          open={true}
+          commitment={budgets.find((budget) => budget.id === selectedCommitmentId)}
+          priorityArray={priorityArray}
+          onClose={() => setSelectedCommitmentId(null)}
+          categories={categories}
+        />
+      )}
     </>
   );
 }
