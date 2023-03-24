@@ -2,9 +2,10 @@ import React, { useState, useEffect }  from "react";
 import { useHistory } from "react-router-dom";
 import { Button  , Modal , Form} from 'semantic-ui-react';
 import CommitmentModal from "./CommitmentModal";
+import NewCommitmentModal from "./NewCommitmentModal";
 
 
-function BudgetDetails ( {currentUser , currentBudget, setCurrentBudget , budgets, onDeleteBudget , onEditBudget}) {
+function BudgetDetails ( {currentUser , currentBudget, setCurrentBudget , budgets, setBudgets , onDeleteBudget , onEditBudget}) {
 
   const history = useHistory();
   //Defining Categories for Budget Presentation
@@ -18,7 +19,7 @@ function BudgetDetails ( {currentUser , currentBudget, setCurrentBudget , budget
   ];
 
 //Defining Priorities for Budget Presentation
-  const priority = [
+  const priorityArray = [
     {id: 0, name: "Fixed"},
     {id: 1, name: "High"},
     {id: 2, name: "Medium"},
@@ -43,9 +44,8 @@ const budgetHours =  budgets
 
 const surpDef = (168 - budgetHours)
 
+
 //Delete Button and Delete Handler Function
-
-
 
 const handleDelete = async () => {
   console.log('deleted')
@@ -78,8 +78,7 @@ const handleDelete = async () => {
 const deleteButton = <Button negative onClick={handleDelete}>Delete Budget</Button>
 
 
-//TO-DO - Edit Budget Name
-
+//Edit Budget Name Modal & Functions
 
 const [editModalOpen, setEditModalOpen] = useState(false)
 
@@ -119,8 +118,6 @@ const handleEditFormSubmit = async (budgetName) => {
   }
 };
 
-
-
 const editModal = (
   <Modal open={editModalOpen} onClose={() => setEditModalOpen(false)}>
     <Modal.Header>Edit Budget Name</Modal.Header>
@@ -140,23 +137,26 @@ const editModal = (
   </Modal>
 )
 
-const editButton = <Button primary onClick={handleEdit}>Edit Budget</Button>
+const editButton = <Button secondary onClick={handleEdit}>Edit Budget</Button>
 
 //Edit Commitment Modal and Form -- See also CommitmentModal
 
-const [commitModalOpen, setCommitModalOpen] = useState({})
+const [selectedCommitmentId, setSelectedCommitmentId] = useState(null);
 
-const handleClick = (commitmentId) => {
-  setCommitModalOpen((prev) => ({...prev, [commitmentId]: true}));
+
+const handleCommitmentClick = (commitmentId) => {
+  setSelectedCommitmentId(commitmentId);
+};
+
+//Handle Add new Commitment
+
+const [newCommitmentModalOpen , setNewCommitmentModalOpen] = useState(false)
+
+const handleAdd = () => {
+  setNewCommitmentModalOpen(true);
 }
 
-const handleClose = (commitmentId) => {
-  setCommitModalOpen((prev) => ({ ...prev, [commitmentId]: false }));
-};
-
-const handleFormSubmit = (hours, priority, commitmentId) => {
-  // code to update commitment with new hours and priority
-};
+const addCommitButton = <Button primary onClick={handleAdd}>Add New Commitment</Button>
 
 return (
     <>
@@ -165,6 +165,7 @@ return (
     <h2>Total Budget Hours: {budgetHours} / 168 </h2>
     <h3>Surplus/(Deficit): {surpDef}</h3>
     <div>
+      {addCommitButton}
       {editButton}
       {deleteButton}
     </div>
@@ -177,7 +178,7 @@ return (
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "center"
+            alignItems: "center",
             }}
             >
           <h2 align="left">{category.name}</h2>
@@ -185,23 +186,36 @@ return (
           </div>
           <ul>
             {budgetCommits.map((commitment) => (
-              <li key={commitment.id} onClick={()=> handleClick(commitment.id)}>
+              <li key={commitment.id} onClick={()=> handleCommitmentClick(commitment.id)}>
                 <h3>{commitment.commitment_name}</h3>
-                <p>Priority: {priority.find(p => p.id === commitment.priority)?.name}</p>
+                <p>Priority: {priorityArray.find(p => p.id === commitment.priority)?.name}</p>
                 <p>{commitment.commitment_hours} Hours</p>
-                <CommitmentModal
-                  open={commitModalOpen[commitment.id]}
-                  commitment={commitment}
-                  priority={priority}
-                  onClose={()=> handleClose(commitment.id)}
-                  onFormSubmit={handleFormSubmit}
-                />
               </li>
             ))}
           </ul>
         </div>
       ))}
     </div>
+    </div>
+        {selectedCommitmentId && (
+          <CommitmentModal
+          open={true}
+          commitment={budgets.find((budget) => budget.id === selectedCommitmentId)}
+          priorityArray={priorityArray}
+          onClose={() => setSelectedCommitmentId(null)}
+          categories={categories}
+        />
+      )}
+       <div>
+      <NewCommitmentModal
+      open={newCommitmentModalOpen}
+      onClose={() => setNewCommitmentModalOpen(false)}
+      priorityArray={priorityArray}
+      categories={categories}
+      currentBudget={currentBudget}
+      currentUser={currentUser}
+      >
+      </NewCommitmentModal>
     </div>
     </>
   );

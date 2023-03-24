@@ -18,8 +18,6 @@ function UserProfile({currentUser, onDeleteUser, onEditUserProfile }) {
     }
     const [formData, setFormData] = useState(initialFormValues)
 
-    console.log(currentUser.first_name)
-
 
     const { username, first_name, last_name, password , email } = formData
 
