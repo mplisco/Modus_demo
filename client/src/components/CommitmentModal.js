@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {useHistory} from 'react-router-dom';
 import { Modal, Form , Button } from 'semantic-ui-react';
 
-function CommitmentModal({ open, commitment, priorityArray , onClose, onFormSubmit }) {
+function CommitmentModal({ open, commitment, priorityArray , onClose }) {
 
   const history = useHistory();
   const commitmentValuesOrig = {
@@ -74,11 +74,11 @@ function CommitmentModal({ open, commitment, priorityArray , onClose, onFormSubm
   }
 
   const saveButton = <Button type="submit" secondary onClick={handleModalSubmit}>Save</Button>
-  const deleteButton = <Button negative onClick={handleDelete}>Delete Budget</Button>
+  const deleteButton = <Button negative onClick={handleDelete}>Delete Commitment</Button>
 
     return (
       <>
-      <Modal open={open} onClose={onClose}>
+      <Modal style={{maxWidth: 600 }} open={open} onClose={onClose}>
         <Modal.Header>{commitment.commitment_name}</Modal.Header>
         <Modal.Content>
           <Form>

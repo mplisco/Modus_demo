@@ -2,6 +2,7 @@ import React, { useState, useEffect }  from "react";
 import { useHistory } from "react-router-dom";
 import { Button  , Modal , Form} from 'semantic-ui-react';
 import CommitmentModal from "./CommitmentModal";
+import NewCommitmentModal from "./NewCommitmentModal";
 
 
 function BudgetDetails ( {currentUser , currentBudget, setCurrentBudget , budgets, setBudgets , onDeleteBudget , onEditBudget}) {
@@ -43,9 +44,8 @@ const budgetHours =  budgets
 
 const surpDef = (168 - budgetHours)
 
+
 //Delete Button and Delete Handler Function
-
-
 
 const handleDelete = async () => {
   console.log('deleted')
@@ -78,8 +78,7 @@ const handleDelete = async () => {
 const deleteButton = <Button negative onClick={handleDelete}>Delete Budget</Button>
 
 
-//TO-DO - Edit Budget Name
-
+//Edit Budget Name Modal & Functions
 
 const [editModalOpen, setEditModalOpen] = useState(false)
 
@@ -119,8 +118,6 @@ const handleEditFormSubmit = async (budgetName) => {
   }
 };
 
-
-
 const editModal = (
   <Modal open={editModalOpen} onClose={() => setEditModalOpen(false)}>
     <Modal.Header>Edit Budget Name</Modal.Header>
@@ -140,10 +137,9 @@ const editModal = (
   </Modal>
 )
 
-const editButton = <Button primary onClick={handleEdit}>Edit Budget</Button>
+const editButton = <Button secondary onClick={handleEdit}>Edit Budget</Button>
 
 //Edit Commitment Modal and Form -- See also CommitmentModal
-
 
 const [selectedCommitmentId, setSelectedCommitmentId] = useState(null);
 
@@ -152,6 +148,16 @@ const handleCommitmentClick = (commitmentId) => {
   setSelectedCommitmentId(commitmentId);
 };
 
+//Handle Add new Commitment
+
+const [newCommitmentModalOpen , setNewCommitmentModalOpen] = useState(false)
+
+const handleAdd = () => {
+  setNewCommitmentModalOpen(true);
+}
+
+const addCommitButton = <Button primary onClick={handleAdd}>Add New Commitment</Button>
+
 return (
     <>
     {editModal}
@@ -159,6 +165,7 @@ return (
     <h2>Total Budget Hours: {budgetHours} / 168 </h2>
     <h3>Surplus/(Deficit): {surpDef}</h3>
     <div>
+      {addCommitButton}
       {editButton}
       {deleteButton}
     </div>
@@ -199,6 +206,17 @@ return (
           categories={categories}
         />
       )}
+       <div>
+      <NewCommitmentModal
+      open={newCommitmentModalOpen}
+      onClose={() => setNewCommitmentModalOpen(false)}
+      priorityArray={priorityArray}
+      categories={categories}
+      currentBudget={currentBudget}
+      currentUser={currentUser}
+      >
+      </NewCommitmentModal>
+    </div>
     </>
   );
 }
