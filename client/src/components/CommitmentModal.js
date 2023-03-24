@@ -16,8 +16,7 @@ function CommitmentModal({ open, commitment, priorityArray , onClose, onFormSubm
   const [selectedPriority, setSelectedPriority] = useState(commitment.priority)
 
   const { commitment_hours, priority } = commitmentValues
-  
-  
+
   //This is returning all required variables correctly - Need to update and pass through the fetch request
     console.log(selectedPriority)
     console.log(commitment_hours)
@@ -58,12 +57,31 @@ function CommitmentModal({ open, commitment, priorityArray , onClose, onFormSubm
     })
   }
 
+  async function handleDelete() {
+    let budget_id = commitment.id
+
+    console.log(budget_id)
+    if (budget_id) {
+      await fetch(`/budgets/${budget_id}`, {
+        method: 'DELETE'
+      })
+      .then(resp => resp.json())
+      .then(() => {
+      //may need to update budgets here
+        history.push('/home');
+      })
+    }
+  }
+
+  const saveButton = <Button type="submit" secondary onClick={handleModalSubmit}>Save</Button>
+  const deleteButton = <Button negative onClick={handleDelete}>Delete Budget</Button>
+
     return (
       <>
       <Modal open={open} onClose={onClose}>
         <Modal.Header>{commitment.commitment_name}</Modal.Header>
         <Modal.Content>
-          <Form onSubmit={handleModalSubmit}>
+          <Form>
             <Form.Input
               name="commitment_hours"
               label="Hours"
@@ -77,9 +95,7 @@ function CommitmentModal({ open, commitment, priorityArray , onClose, onFormSubm
               value={selectedPriority}
               onChange={handleCommitmentValues}
             />
-            <Button type="submit" primary>
-              Save
-            </Button>
+            {saveButton}{deleteButton}
           </Form>
         </Modal.Content>
       </Modal>
