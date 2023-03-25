@@ -117,7 +117,7 @@ function App() {
             setCurrentBudget={setCurrentBudget}/>
           </Route>
           <Route path="/">
-              <Redirect to="/home" />
+              <Redirect to="/login"/>
           </Route>
         </Switch>
       </div>
