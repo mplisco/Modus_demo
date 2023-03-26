@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState , useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import profileIcon from '../assets/profileIcon.png';
 import { Form , Button } from 'semantic-ui-react';
+import { AppContext } from './AppContext';
 
 function UserProfile({currentUser, onDeleteUser, onEditUserProfile }) {
 
     const [editFormIsOpen, setEditFormIsOpen] = useState(false)
     const [profilePhoto, setProfilePhoto] = useState(profileIcon)
     const history = useHistory();
+
+    const {currentContextUser} = useContext(AppContext);
+
+    console.log(currentContextUser)
+    
 
     const initialFormValues = {
         first_name: currentUser.first_name,

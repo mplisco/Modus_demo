@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect , useContext } from "react"
 import './App.css';
 import { BrowserRouter, Switch, Route , Redirect} from "react-router-dom";
 import LoginPage from "./components/LoginPage";
@@ -8,6 +8,7 @@ import NewBudget from "./components/NewBudget";
 import BudgetDetails from "./components/BudgetDetails";
 import Header from "./components/Header";
 import UserProfile from "./components/UserProfile";
+import { AppContext , AppProvider } from "./components/AppContext";
 
 function App() {
 
@@ -39,7 +40,7 @@ function App() {
     fetch("/mybudgets")
     .then((r) => r.json())
     .then((data) => setBudgets(data))
-  }, []);
+  }, [])
 
   useEffect(() => {
     fetch("/home")
@@ -63,10 +64,10 @@ function App() {
     setCurrentUser(updateUser)
   }
 
-  const onDeleteBudget = (currentUserId) => {
-    const updatedBudgets = budgets.filter((budget) => budget.user_id !== currentUserId)
-    setBudgetList(updatedBudgets)
-  }
+  // const onDeleteBudget = (currentUserId) => {
+  //   const updatedBudgets = budgets.filter((budget) => budget.user_id !== currentUserId)
+  //   setBudgetList(updatedBudgets)
+  // }
 
   const onEditBudget = (currentUserId) => {
     const updatedBudgets = budgets.filter((budget) => budget.user_id !== currentUserId)
@@ -74,6 +75,7 @@ function App() {
   }
 
   return (
+    <AppProvider>
     <BrowserRouter>
       <div className="App">
         <Header currentUser={currentUser}/>
@@ -104,7 +106,6 @@ function App() {
             currentUser={currentUser}
             currentBudget={currentBudget}
             budgets={budgets}
-            onDeleteBudget={onDeleteBudget}
             setCurrentBudget={setCurrentBudget}
             onEditBudget={onEditBudget}
             />
@@ -122,7 +123,7 @@ function App() {
         </Switch>
       </div>
     </BrowserRouter>
-
+    </AppProvider>
   );
 }
 

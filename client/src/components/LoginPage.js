@@ -1,6 +1,6 @@
 import {React , useEffect, useState } from "react";
 import { Redirect, Route, useHistory } from "react-router-dom";
-import { Button, Form, TextArea , Container, Dropdown } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 
 function LoginPage({ handleUserLogin, currentUser }) {
   const [username, setUsername] = useState('');
