@@ -26,6 +26,7 @@ function BudgetDetails ( {currentUser , currentBudget, setCurrentBudget , budget
     {id: 3, name: "Low"}
   ]
 
+
   //Matching Commitment Categories to those outlined above
   const categoryBudgetCommits = categories.map((category) => {
     const budgetCommits = budgets.filter(
@@ -48,12 +49,10 @@ const surpDef = (168 - budgetHours)
 //Delete Button and Delete Handler Function
 
 const handleDelete = async () => {
-  console.log('deleted')
   const deleteBudgets = budgets.filter((budget) => budget.budget_name === currentBudget);
 
   try {
     await Promise.all(deleteBudgets.map(async (budget) => {
-      console.log(budget)
       const response = await fetch(`/budgets/${budget.id}`, {
         method: 'DELETE',
         headers: {
@@ -206,7 +205,7 @@ return (
           categories={categories}
         />
       )}
-       <div>
+      <div>
       <NewCommitmentModal
       open={newCommitmentModalOpen}
       onClose={() => setNewCommitmentModalOpen(false)}

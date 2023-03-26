@@ -1,6 +1,7 @@
-import React from "react";
+import React , {useContext} from "react";
 import {Link} from 'react-router-dom';
 import { List , Button } from "semantic-ui-react";
+import { AppContext } from "./AppContext";
 
 
 
@@ -9,6 +10,9 @@ function Home({ budgets, budgetList , currentBudget, setCurrentBudget}) {
     console.log(budgetList)
     console.log(budgets)
 
+    const {currentContextUser , setCurrentContextUser } = useContext(AppContext)
+
+    console.log(currentContextUser)
 
     const handleClick = (e) => {
         const budgetName = e.target.innerText
