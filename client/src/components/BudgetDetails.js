@@ -5,7 +5,7 @@ import CommitmentModal from "./CommitmentModal";
 import NewCommitmentModal from "./NewCommitmentModal";
 
 
-function BudgetDetails ( {currentUser , currentBudget, setCurrentBudget , budgets, setBudgets , onDeleteBudget , onEditBudget}) {
+function BudgetDetails ( { setBudgetList , currentUser , currentBudget, setCurrentBudget , budgets, setBudgets , onEditBudget}) {
 
   const history = useHistory();
   //Defining Categories for Budget Presentation
@@ -61,14 +61,21 @@ const handleDelete = async () => {
         },
       })
       if (response.ok) {
-        onDeleteBudget(budget.id);
+        fetch("/budgets")
+        .then((r) => r.json())
+            .then((data) => setBudgets(data))
+            fetch("/home")
+            .then((r) => r.json())
+            .then((data) => setBudgetList(data))
+
+            history.push(`/home`)
+            window.location.reload()
       } else {
         throw new Error(`Failed to delete budget ${budget.id}`);
       }
     })
     )
     console.log('budget successfully deleted');
-    history.push('/home');
   } catch (error) {
     console.error(error);
   }
@@ -100,7 +107,18 @@ const handleEditFormSubmit = async (budgetName) => {
         body: JSON.stringify({budget_name: budgetName})
       })
       if (response.ok) {
-        onEditBudget(budget.id);
+        // onEditBudget(budget.id);
+        fetch("/budgets")
+            .then((r) => r.json())
+            .then((data) => setBudgets(data))
+            .then(setCurrentBudget(budgetName))
+            fetch("/home")
+            .then((r) => r.json())
+            .then((data) => setBudgetList(data))
+
+            .then(setCurrentBudget(budgetName))
+            history.push("/home")
+            window.location.reload()
       } else {
         throw new Error(`Failed to edit budget: ${budget.id}`);
       }

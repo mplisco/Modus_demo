@@ -64,10 +64,10 @@ function App() {
     setCurrentUser(updateUser)
   }
 
-  const onDeleteBudget = (currentUserId) => {
-    const updatedBudgets = budgets.filter((budget) => budget.user_id !== currentUserId)
-    setBudgetList(updatedBudgets)
-  }
+  // const onDeleteBudget = (currentUserId) => {
+  //   const updatedBudgets = budgets.filter((budget) => budget.user_id !== currentUserId)
+  //   setBudgetList(updatedBudgets)
+  // }
 
   const onEditBudget = (currentUserId) => {
     const updatedBudgets = budgets.filter((budget) => budget.user_id !== currentUserId)
@@ -106,7 +106,6 @@ function App() {
             currentUser={currentUser}
             currentBudget={currentBudget}
             budgets={budgets}
-            onDeleteBudget={onDeleteBudget}
             setCurrentBudget={setCurrentBudget}
             onEditBudget={onEditBudget}
             />
@@ -125,7 +124,6 @@ function App() {
       </div>
     </BrowserRouter>
     </AppProvider>
-
   );
 }
 
