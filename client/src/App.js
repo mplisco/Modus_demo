@@ -18,6 +18,8 @@ function App() {
   const [budgetList, setBudgetList] = useState([]);
   const [currentBudget, setCurrentBudget] = useState('');
 
+  console.log(currentUser)
+
   //Auth fetch to determine if user is logged in and set if yes
   useEffect(() => {
     fetch("/auth")

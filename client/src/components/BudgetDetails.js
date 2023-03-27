@@ -26,6 +26,28 @@ function BudgetDetails ( { setBudgetList , currentUser , currentBudget, setCurre
     {id: 3, name: "Low"}
   ]
 
+  const priorityColorClass = (priority , surpDef) => {
+    if (surpDef > 0) {
+      // No color for positive surpDef
+      return "";
+    } else if (priority === 3) {
+      // Red for Low priority if surpDef is negative
+      return "red";
+    } else {
+      // Default color for other priorities if surpDef is negative
+      return "";
+    }
+  };
+
+  const commitmentRowClass = (priority , surpDef) => {
+    if (surpDef < 0 && priority === 3) {
+      // Highlight Low priority commitments if surpDef is negative
+      return "negative";
+    } else {
+      return "";
+    }
+  };
+
 
   //Matching Commitment Categories to those outlined above
   const categoryBudgetCommits = categories.map((category) => {
@@ -33,7 +55,8 @@ function BudgetDetails ( { setBudgetList , currentUser , currentBudget, setCurre
       (budget) => budget.budget_name === currentBudget && budget.category_id === category.id
     );
     console.log(category.name, budgetCommits);
-    return { category, budgetCommits };
+    const totalHours = budgetCommits.reduce((total, {commitment_hours}) => total + commitment_hours, 0)
+    return { category, budgetCommits , totalHours};
   });
 
   console.log(categoryBudgetCommits);
@@ -44,6 +67,9 @@ const budgetHours =  budgets
 .reduce((total , budget) => total + budget.commitment_hours, 0)
 
 const surpDef = (168 - budgetHours)
+
+const surpDefColorClass = surpDef < 0 ? "red" : "black"
+const surpDefWord = surpDef < 0 ? "Total Time Deficit" : "Total Time Surplus"
 
 
 //Delete Button and Delete Handler Function
@@ -81,7 +107,7 @@ const handleDelete = async () => {
   }
 };
 
-const deleteButton = <Button negative onClick={handleDelete}>Delete Budget</Button>
+const deleteButton = <Button negative onClick={handleDelete}>Delete Time Budget</Button>
 
 
 //Edit Budget Name Modal & Functions
@@ -180,36 +206,67 @@ return (
     {editModal}
     <h1>{currentBudget}</h1>
     <h2>Total Budget Hours: {budgetHours} / 168 </h2>
-    <h3>Surplus/(Deficit): {surpDef}</h3>
+    <h3 style={{color: surpDefColorClass}}>
+      {surpDefWord}: <br></br>
+      {surpDef} Hours
+    </h3>
     <div>
       {addCommitButton}
       {editButton}
-      {deleteButton}
     </div>
     <br></br>
     <div class="ui centered grid">
       <div class="ten wide column">
-      {categoryBudgetCommits.map(({ category, budgetCommits }) => (
+      {categoryBudgetCommits.map(({ category, budgetCommits , totalHours}) => (
         <div key={category.id}>
-          <div class="ui raised segment"
+          <div class="ui raised top attached segment"
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             }}
             >
-          <h2 align="left">{category.name}</h2>
-          <h3 align="right">Hours</h3>
+          <div class="vertically fitted item">
+            <h2 align="left">{category.name}</h2>
           </div>
-          <ul>
-            {budgetCommits.map((commitment) => (
-              <li key={commitment.id} onClick={()=> handleCommitmentClick(commitment.id)}>
-                <h3>{commitment.commitment_name}</h3>
-                <p>Priority: {priorityArray.find(p => p.id === commitment.priority)?.name}</p>
-                <p>{commitment.commitment_hours} Hours</p>
-              </li>
-            ))}
-          </ul>
+          <div class="ui tiny statistic vertically fitted item">
+            <div class="value">
+              {totalHours}
+            </div>
+            <div class="label">
+              Hours
+            </div>
+          </div>
+          </div>
+          <div class="ui attached segment">
+          <div class="eight wide column">
+            <table class="ui striped table">
+              <tbody>
+              {budgetCommits.map((commitment) => (
+                <tr key={commitment.id} onClick={()=> handleCommitmentClick(commitment.id)}
+                className={commitmentRowClass(commitment.priority, surpDef)}>
+                  <td class="collapsing">
+                    <a>
+                    <h3>{commitment.commitment_name}</h3>
+                    </a>
+                  </td>
+                  <td>
+                    <div class={`ui small ${priorityColorClass(commitment.priority)} label`}>
+                    {priorityArray.find(p => p.id === commitment.priority)?.name}
+                    </div>
+                  </td>
+                  <td class="right aligned collapsing">
+                    <a>
+                    <h4>{commitment.commitment_hours} Hours</h4>
+                    </a>
+                  </td>
+                </tr>
+              ))}
+              </tbody>
+            </table>
+          </div>
+          </div>
+          <br></br>
         </div>
       ))}
     </div>
@@ -233,6 +290,9 @@ return (
       currentUser={currentUser}
       >
       </NewCommitmentModal>
+    </div>
+    <div>
+    {deleteButton}
     </div>
     </>
   );
