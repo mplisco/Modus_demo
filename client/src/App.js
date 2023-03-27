@@ -17,6 +17,7 @@ function App() {
   const [budgets, setBudgets] = useState([]);
   const [budgetList, setBudgetList] = useState([]);
   const [currentBudget, setCurrentBudget] = useState(JSON.parse(localStorage.getItem('currentBudget')) || '');
+  const [authCheckCompleted, setAuthCheckCompleted] = useState(false)
 
   console.log(currentUser)
 
@@ -28,6 +29,7 @@ function App() {
         res.json().then(user => setCurrentUser(user))
       }
     })
+    .finally(() => setAuthCheckCompleted(true));
   },[])
 
   useEffect(()=> {
@@ -88,6 +90,10 @@ function App() {
     setBudgetList(updatedBudgets)
   }
 
+  if (!authCheckCompleted) {
+    return <div>Checking Authentication...</div>
+  }
+  
   return (
     <AppProvider>
     <BrowserRouter>
@@ -132,7 +138,7 @@ function App() {
             handleSetCurrentBudget={handleSetCurrentBudget}/>
           </Route>
           <Route path="/">
-              <Redirect to="/login"/>
+            {currentUser ? <Redirect to="/home" /> : <Redirect to="/login" />}
           </Route>
         </Switch>
       </div>
