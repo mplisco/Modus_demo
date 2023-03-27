@@ -10,9 +10,9 @@ function UserProfile({currentUser, onDeleteUser, onEditUserProfile }) {
     const [profilePhoto, setProfilePhoto] = useState(profileIcon)
     const history = useHistory();
 
-    const {currentContextUser } = useContext(AppContext);
+    // const {currentContextUser } = useContext(AppContext);
 
-    console.log(currentContextUser)
+    // console.log(currentContextUser)
 
 
     const initialFormValues = {

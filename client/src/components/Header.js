@@ -4,10 +4,10 @@ import {Link, useHistory} from 'react-router-dom'
 
 import toplogo from "../assets/ModusLogo - Light.png"
 
-function Header({ currentUser }) {
+function Header({ currentUser , handleLogout }) {
     const history = useHistory();
 
-    async function handleLogout() {
+    async function handleLogoutAndFetch() {
         await fetch("/logout", {
             method: "DELETE",
             mode:"cors",
@@ -15,6 +15,7 @@ function Header({ currentUser }) {
               "Content-Type": "application/json"
             }
         }).then(() => {
+            handleLogout()
             history.push("/login")
             // alert("You've been successfully logged out");
             window.location.reload()
@@ -27,7 +28,7 @@ function Header({ currentUser }) {
     const login_option = <Menu.Item as={Link} to ="/login" class="active item">Login</Menu.Item>
     const profile_option = <Menu.Item as={Link} to ="/profile" class="item">Profile</Menu.Item>
     const signup_option = <Menu.Item as={Link} to ="/signup" class="item">Sign-up</Menu.Item>
-    const logout_option = <Menu.Item as={Link} onClick={handleLogout} position="right" class="item">Logout</Menu.Item>
+    const logout_option = <Menu.Item as={Link} onClick={handleLogoutAndFetch} position="right" class="item">Logout</Menu.Item>
     const newbudget_option = <Menu.Item as={Link} to ="/newbudget" class="item">New Budget</Menu.Item>
     const home_option = <Menu.Item as={Link} to ="/home" class="active item">Home</Menu.Item>
 

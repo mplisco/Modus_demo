@@ -13,7 +13,7 @@ import { AppContext , AppProvider } from "./components/AppContext";
 function App() {
 
   const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState('');
+  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser')) || '');
   const [budgets, setBudgets] = useState([]);
   const [budgetList, setBudgetList] = useState([]);
   const [currentBudget, setCurrentBudget] = useState('');
@@ -52,17 +52,25 @@ function App() {
 
   function handleUserLogin(user) {
     setCurrentUser(user)
+    localStorage.setItem('currentUser', JSON.stringify(user))
+  }
+  
+  function handleLogout() {
+    setCurrentUser('');
+    localStorage.removeItem('currentUser');
   }
 
    //deactivate user from db
   const onDeleteUser = (id) => {
-    return fetch(`users/${id}`, { method: 'DELETE' });
+    localStorage.removeItem('currentUser');
+    return fetch(`users/${id}`, { method: 'DELETE' })
   }
 
    //edit user profile
   const onEditUserProfile = (modifiedUser) => {
     const updateUser = users.map(user => currentUser.id === user.id ? modifiedUser : user)
     setCurrentUser(updateUser)
+    localStorage.setItem('currentUser', JSON.stringify(modifiedUser))
   }
 
   // const onDeleteBudget = (currentUserId) => {
@@ -79,7 +87,7 @@ function App() {
     <AppProvider>
     <BrowserRouter>
       <div className="App">
-        <Header currentUser={currentUser}/>
+        <Header currentUser={currentUser} handleLogout={handleLogout}/>
         <Switch>
           <Route path="/home">
             <Home
