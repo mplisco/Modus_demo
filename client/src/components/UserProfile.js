@@ -1,4 +1,4 @@
-import React, { useState , useContext } from 'react';
+import React, { useState , useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import profileIcon from '../assets/profileIcon.png';
 import { Form , Button } from 'semantic-ui-react';
@@ -10,10 +10,10 @@ function UserProfile({currentUser, onDeleteUser, onEditUserProfile }) {
     const [profilePhoto, setProfilePhoto] = useState(profileIcon)
     const history = useHistory();
 
-    const {currentContextUser} = useContext(AppContext);
+    // const {currentContextUser } = useContext(AppContext);
 
-    console.log(currentContextUser)
-    
+    // console.log(currentContextUser)
+
 
     const initialFormValues = {
         first_name: currentUser.first_name,
@@ -48,24 +48,25 @@ function UserProfile({currentUser, onDeleteUser, onEditUserProfile }) {
             .then(() => {
                 onEditUserProfile(formData)
                 history.push("/profile")
-                window.location.reload();
+                // window.location.reload();
             })
     }
 
     async function deleteAccount() {
-        let user_id = currentUser.id
+        if (!currentUser) {
+          history.push("/login");
+          return;
+        }
+        let user_id = currentUser.id;
+        await onDeleteUser(user_id);
+        await fetch(`users/${user_id}`, { method: 'DELETE' });
 
-        if (user_id) {
-            await fetch(`users/${user_id}`,
-            { method: 'DELETE'});
-            await onDeleteUser(user_id).then(() => {
-            alert("Your account has been deactivated")
-            history.push("/signup")
-            window.location.reload();
-        });
-    }
-        if(!currentUser) {history.push("/login")}
-    }
+        localStorage.removeItem('currentUser');
+
+        alert("Your account has been deactivated");
+        history.push("/login");
+        window.location.reload();
+      }
 
     const editForm = (
         <div class="ui centered grid">

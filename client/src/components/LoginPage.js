@@ -21,12 +21,15 @@ function LoginPage({ handleUserLogin, currentUser }) {
       .then(res => {
         if(res.ok) {
           res.json().then(user => handleUserLogin(user))
-          .then(()=> history.push('/home'))
-        } else {
+          .then(() => {
+            history.push('/home');
+            window.location.reload();
+          })
+         }
+          else {
           res.json().then((errorData)=> alert("Invalid username or password"))
         }
       })
-    // window.location.reload()
     setPassword('');
   }
 

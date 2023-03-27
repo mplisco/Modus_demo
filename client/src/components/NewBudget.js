@@ -3,7 +3,7 @@ import { Button, Form, TextArea , Container, Dropdown } from 'semantic-ui-react'
 import { Redirect, Route, useHistory } from "react-router-dom";
 
 
-function NewBudget ({currentUser , setBudgets , setCurrentBudget , setBudgetList}) {
+function NewBudget ({currentUser , setBudgets , setCurrentBudget , handleSetCurrentBudget , setBudgetList}) {
     const [budgetName, setBudgetName ] = useState('')
     const history = useHistory();
 
@@ -40,8 +40,8 @@ function NewBudget ({currentUser , setBudgets , setCurrentBudget , setBudgetList
             .then((r) => r.json())
             .then((data) => setBudgetList(data))
             
-            // setCurrentBudget(budgetName)
-            history.push(`/home`)
+            handleSetCurrentBudget(budgetName)
+            history.push(`/budgets/${budgetName}`)
             window.location.reload()
         } else {
             res.json().then((errorData)=> alert(errorData.errors))

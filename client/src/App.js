@@ -13,10 +13,12 @@ import { AppContext , AppProvider } from "./components/AppContext";
 function App() {
 
   const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState('');
+  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser')) || '');
   const [budgets, setBudgets] = useState([]);
   const [budgetList, setBudgetList] = useState([]);
-  const [currentBudget, setCurrentBudget] = useState('');
+  const [currentBudget, setCurrentBudget] = useState(JSON.parse(localStorage.getItem('currentBudget')) || '');
+
+  console.log(currentUser)
 
   //Auth fetch to determine if user is logged in and set if yes
   useEffect(() => {
@@ -48,20 +50,32 @@ function App() {
     .then((data) => setBudgetList(data))
   }, []);
 
+  function handleSetCurrentBudget(budgetName) {
+    setCurrentBudget(budgetName);
+    localStorage.setItem('currentBudget', JSON.stringify(budgetName));
+  }
+
   function handleUserLogin(user) {
     setCurrentUser(user)
+    localStorage.setItem('currentUser', JSON.stringify(user))
+  }
+  
+  function handleLogout() {
+    setCurrentUser('');
+    localStorage.removeItem('currentUser');
   }
 
    //deactivate user from db
-   const onDeleteUser = (id) => {
-    const updatedUser = users.filter((currentUser) => currentUser.id !== id)
-    setCurrentUser(updatedUser)
+  const onDeleteUser = (id) => {
+    localStorage.removeItem('currentUser');
+    return fetch(`users/${id}`, { method: 'DELETE' })
   }
 
    //edit user profile
   const onEditUserProfile = (modifiedUser) => {
     const updateUser = users.map(user => currentUser.id === user.id ? modifiedUser : user)
     setCurrentUser(updateUser)
+    localStorage.setItem('currentUser', JSON.stringify(modifiedUser))
   }
 
   // const onDeleteBudget = (currentUserId) => {
@@ -78,14 +92,14 @@ function App() {
     <AppProvider>
     <BrowserRouter>
       <div className="App">
-        <Header currentUser={currentUser}/>
+        <Header currentUser={currentUser} handleLogout={handleLogout}/>
         <Switch>
           <Route path="/home">
             <Home
             currentUser={currentUser}
             budgets={budgets}
             budgetList={budgetList}
-            setCurrentBudget={setCurrentBudget}
+            handleSetCurrentBudget={handleSetCurrentBudget}
             currentBudget={currentBudget}
             />
           </Route>
@@ -98,7 +112,7 @@ function App() {
           <Route path="/newbudget">
             <NewBudget
             currentUser={currentUser}
-            setCurrentBudget={setCurrentBudget}
+            handleSetCurrentBudget={handleSetCurrentBudget}
             />
           </Route>
           <Route path="/budgets/:budget">
@@ -106,7 +120,7 @@ function App() {
             currentUser={currentUser}
             currentBudget={currentBudget}
             budgets={budgets}
-            setCurrentBudget={setCurrentBudget}
+            handleSetCurrentBudget={handleSetCurrentBudget}
             onEditBudget={onEditBudget}
             />
           </Route>
@@ -115,7 +129,7 @@ function App() {
             currentUser={currentUser}
             onDeleteUser={onDeleteUser}
             onEditUserProfile={onEditUserProfile}
-            setCurrentBudget={setCurrentBudget}/>
+            handleSetCurrentBudget={handleSetCurrentBudget}/>
           </Route>
           <Route path="/">
               <Redirect to="/login"/>

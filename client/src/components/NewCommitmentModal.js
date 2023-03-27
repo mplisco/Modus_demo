@@ -70,6 +70,7 @@ function NewCommitmentModal ({open , onClose , categories , priorityArray , curr
             if (response.ok) {
                 console.log("Budget created successfully!")
                 onClose()
+                window.location.reload()
             } else {
                 throw new Error("Failed to create budget.")
             }
