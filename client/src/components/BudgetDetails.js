@@ -5,7 +5,7 @@ import CommitmentModal from "./CommitmentModal";
 import NewCommitmentModal from "./NewCommitmentModal";
 
 
-function BudgetDetails ( { setBudgetList , currentUser , currentBudget, setCurrentBudget , budgets, setBudgets , onEditBudget}) {
+function BudgetDetails ( { setBudgetList , currentUser , currentBudget, setCurrentBudget , handleSetCurrentBudget ,  budgets, setBudgets , onEditBudget}) {
 
   const history = useHistory();
   //Defining Categories for Budget Presentation
@@ -135,13 +135,12 @@ const handleEditFormSubmit = async (budgetName) => {
         fetch("/budgets")
             .then((r) => r.json())
             .then((data) => setBudgets(data))
-            .then(setCurrentBudget(budgetName))
+            .then(handleSetCurrentBudget(budgetName))
             fetch("/home")
             .then((r) => r.json())
             .then((data) => setBudgetList(data))
 
-            .then(setCurrentBudget(budgetName))
-            history.push("/home")
+            .then(handleSetCurrentBudget(budgetName))
             window.location.reload()
       } else {
         throw new Error(`Failed to edit budget: ${budget.id}`);
@@ -152,7 +151,7 @@ const handleEditFormSubmit = async (budgetName) => {
       ...currentBudget,
       budget_name: budgetName
     };
-    setCurrentBudget(updatedBudget)
+    handleSetCurrentBudget(budgetName)
     setEditModalOpen(false);
   } catch (error) {
     console.error(error);

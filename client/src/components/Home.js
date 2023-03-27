@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { List, Button, Segment } from "semantic-ui-react";
 import { AppContext } from "./AppContext";
 
-function Home({ budgets, budgetList, currentBudget, setCurrentBudget }) {
+function Home({ budgets, budgetList, currentBudget , handleSetCurrentBudget }) {
 
   const handleClick = (e) => {
     const budgetName = e.target.innerText;
-    setCurrentBudget(budgetName);
+    handleSetCurrentBudget(budgetName);
   };
 
 

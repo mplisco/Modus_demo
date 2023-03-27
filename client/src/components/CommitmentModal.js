@@ -53,22 +53,28 @@ function CommitmentModal({ open, commitment, priorityArray , onClose }) {
     .then(resp => resp.json())
     .then(() => {
       //may need to update budgets here
-    history.push('/home');
+    // history.push('/home')
+    window.location.reload();
     })
   }
 
-  async function handleDelete() {
+  async function handleDelete(e) {
+    e.preventDefault();
     let budget_id = commitment.id
+
 
     console.log(budget_id)
     if (budget_id) {
       await fetch(`/budgets/${budget_id}`, {
         method: 'DELETE'
       })
-      .then(resp => resp.json())
+      // .then(resp => resp.json())
       .then(() => {
       //may need to update budgets here
-        history.push('/home');
+        // history.push('/home');
+        console.log("commitment deleted")
+        onClose()
+        window.location.reload()
       })
     }
   }

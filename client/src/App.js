@@ -16,7 +16,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser')) || '');
   const [budgets, setBudgets] = useState([]);
   const [budgetList, setBudgetList] = useState([]);
-  const [currentBudget, setCurrentBudget] = useState('');
+  const [currentBudget, setCurrentBudget] = useState(JSON.parse(localStorage.getItem('currentBudget')) || '');
 
   console.log(currentUser)
 
@@ -49,6 +49,11 @@ function App() {
     .then((r) => r.json())
     .then((data) => setBudgetList(data))
   }, []);
+
+  function handleSetCurrentBudget(budgetName) {
+    setCurrentBudget(budgetName);
+    localStorage.setItem('currentBudget', JSON.stringify(budgetName));
+  }
 
   function handleUserLogin(user) {
     setCurrentUser(user)
@@ -94,7 +99,7 @@ function App() {
             currentUser={currentUser}
             budgets={budgets}
             budgetList={budgetList}
-            setCurrentBudget={setCurrentBudget}
+            handleSetCurrentBudget={handleSetCurrentBudget}
             currentBudget={currentBudget}
             />
           </Route>
@@ -107,7 +112,7 @@ function App() {
           <Route path="/newbudget">
             <NewBudget
             currentUser={currentUser}
-            setCurrentBudget={setCurrentBudget}
+            handleSetCurrentBudget={handleSetCurrentBudget}
             />
           </Route>
           <Route path="/budgets/:budget">
@@ -115,7 +120,7 @@ function App() {
             currentUser={currentUser}
             currentBudget={currentBudget}
             budgets={budgets}
-            setCurrentBudget={setCurrentBudget}
+            handleSetCurrentBudget={handleSetCurrentBudget}
             onEditBudget={onEditBudget}
             />
           </Route>
@@ -124,7 +129,7 @@ function App() {
             currentUser={currentUser}
             onDeleteUser={onDeleteUser}
             onEditUserProfile={onEditUserProfile}
-            setCurrentBudget={setCurrentBudget}/>
+            handleSetCurrentBudget={handleSetCurrentBudget}/>
           </Route>
           <Route path="/">
               <Redirect to="/login"/>

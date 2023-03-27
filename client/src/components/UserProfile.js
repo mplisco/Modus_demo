@@ -48,7 +48,7 @@ function UserProfile({currentUser, onDeleteUser, onEditUserProfile }) {
             .then(() => {
                 onEditUserProfile(formData)
                 history.push("/profile")
-                window.location.reload();
+                // window.location.reload();
             })
     }
 
@@ -60,6 +60,8 @@ function UserProfile({currentUser, onDeleteUser, onEditUserProfile }) {
         let user_id = currentUser.id;
         await onDeleteUser(user_id);
         await fetch(`users/${user_id}`, { method: 'DELETE' });
+
+        localStorage.removeItem('currentUser');
 
         alert("Your account has been deactivated");
         history.push("/login");
