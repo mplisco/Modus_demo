@@ -21,9 +21,9 @@ function BudgetDetails ( { setBudgetList , currentUser , currentBudget, setCurre
 //Defining Priorities for Budget Presentation
   const priorityArray = [
     {id: 0, name: "Fixed"},
-    {id: 1, name: "High"},
-    {id: 2, name: "Medium"},
-    {id: 3, name: "Low"}
+    {id: 1, name: "High Priority"},
+    {id: 2, name: "Medium Priority"},
+    {id: 3, name: "Low Priority"}
   ]
 
   const priorityColorClass = (priority , surpDef) => {
@@ -247,17 +247,17 @@ return (
                 className={commitmentRowClass(commitment.priority, surpDef)}>
                   <td class="collapsing">
                     <a>
-                    <h3>{commitment.commitment_name}</h3>
+                      <h3>{commitment.commitment_name}</h3>
                     </a>
                   </td>
                   <td>
                     <div class={`ui small ${priorityColorClass(commitment.priority)} label`}>
-                    {priorityArray.find(p => p.id === commitment.priority)?.name}
+                      {priorityArray.find(p => p.id === commitment.priority)?.name}
                     </div>
                   </td>
                   <td class="right aligned collapsing">
                     <a>
-                    <h4>{commitment.commitment_hours} Hours</h4>
+                      <h4>{commitment.commitment_hours} Hours</h4>
                     </a>
                   </td>
                 </tr>
@@ -291,7 +291,7 @@ return (
       >
       </NewCommitmentModal>
     </div>
-    <div>
+    <div style={{marginBottom: "1em"}}>
     {deleteButton}
     </div>
     </>
