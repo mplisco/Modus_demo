@@ -15,8 +15,10 @@ function Header({ currentUser }) {
               "Content-Type": "application/json"
             }
         }).then(() => {
-            alert("You've been successfully logged out");
-            history.push("/login");
+            history.push("/login")
+            // alert("You've been successfully logged out");
+            window.location.reload()
+            ;
             }).catch(error => {
             console.error(error);
         })

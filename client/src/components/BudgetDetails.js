@@ -27,14 +27,12 @@ function BudgetDetails ( { setBudgetList , currentUser , currentBudget, setCurre
   ]
 
   const priorityColorClass = (priority , surpDef) => {
-    if (surpDef > 0) {
-      // No color for positive surpDef
-      return "";
-    } else if (priority === 3) {
-      // Red for Low priority if surpDef is negative
+    if (priority === 3) {
       return "red";
-    } else {
-      // Default color for other priorities if surpDef is negative
+    } else if (priority === 0) {
+      return "black";
+    }
+    else {
       return "";
     }
   };

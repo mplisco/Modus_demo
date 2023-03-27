@@ -55,9 +55,8 @@ function App() {
   }
 
    //deactivate user from db
-   const onDeleteUser = (id) => {
-    const updatedUser = users.filter((currentUser) => currentUser.id !== id)
-    setCurrentUser(updatedUser)
+  const onDeleteUser = (id) => {
+    return fetch(`users/${id}`, { method: 'DELETE' });
   }
 
    //edit user profile

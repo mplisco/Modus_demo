@@ -32,7 +32,11 @@ function Home({ budgets, budgetList, currentBudget, setCurrentBudget }) {
       ))
     ) : (
       <Segment placeholder textAlign="center">
-        Placeholder Text about Budget
+        <h4>
+        You have not yet created any Time Budgets.
+        <br></br>
+        Select 'Create New Budget' below to get started.
+        </h4>
       </Segment>
     );
 

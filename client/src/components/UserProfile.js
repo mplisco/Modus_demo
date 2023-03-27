@@ -53,19 +53,18 @@ function UserProfile({currentUser, onDeleteUser, onEditUserProfile }) {
     }
 
     async function deleteAccount() {
-        let user_id = currentUser.id
+        if (!currentUser) {
+          history.push("/login");
+          return;
+        }
+        let user_id = currentUser.id;
+        await onDeleteUser(user_id);
+        await fetch(`users/${user_id}`, { method: 'DELETE' });
 
-        if (user_id) {
-            await fetch(`users/${user_id}`,
-            { method: 'DELETE'});
-            await onDeleteUser(user_id).then(() => {
-            alert("Your account has been deactivated")
-            history.push("/signup")
-            window.location.reload();
-        });
-    }
-        if(!currentUser) {history.push("/login")}
-    }
+        alert("Your account has been deactivated");
+        history.push("/login");
+        window.location.reload();
+      }
 
     const editForm = (
         <div class="ui centered grid">
