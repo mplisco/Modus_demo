@@ -27,7 +27,7 @@ function BudgetDetails ( { setBudgetList , currentUser , currentBudget, setCurre
   ]
 
   const priorityColorClass = (priority , surpDef) => {
-    if (priority === 3) {
+    if (surpDef < 0 && priority === 3) {
       return "red";
     } else if (priority === 0) {
       return "black";
@@ -248,7 +248,7 @@ return (
                     </a>
                   </td>
                   <td>
-                    <div class={`ui small ${priorityColorClass(commitment.priority)} label`}>
+                    <div class={`ui small ${priorityColorClass(commitment.priority, surpDef)} label`}>
                       {priorityArray.find(p => p.id === commitment.priority)?.name}
                     </div>
                   </td>
