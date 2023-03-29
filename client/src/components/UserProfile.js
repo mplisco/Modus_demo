@@ -1,6 +1,6 @@
 import React, { useState , useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import profileIcon from '../assets/profileIcon.png';
+import profileIcon from '../assets/IMG_9062.JPG';
 import { Form , Button } from 'semantic-ui-react';
 import { AppContext } from './AppContext';
 

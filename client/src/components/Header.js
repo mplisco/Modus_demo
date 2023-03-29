@@ -18,14 +18,14 @@ function Header({ currentUser , handleLogout }) {
             handleLogout()
             history.push("/login")
             // alert("You've been successfully logged out");
-            // window.location.reload()
+            window.location.reload()
             ;
             }).catch(error => {
             console.error(error);
         })
     }
 
-    const login_option = <Menu.Item as={Link} to ="/login" class="active item">Login</Menu.Item>
+    const login_option = <Menu.Item as={Link} to ="/login" class="item">Login</Menu.Item>
     const profile_option = <Menu.Item as={Link} to ="/profile" class="item">Profile</Menu.Item>
     const signup_option = <Menu.Item as={Link} to ="/signup" class="item">Sign-up</Menu.Item>
     const logout_option = <Menu.Item onClick={handleLogoutAndFetch} position="right" class="item">Logout</Menu.Item>

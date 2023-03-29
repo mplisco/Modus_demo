@@ -105,7 +105,7 @@ const handleDelete = async () => {
   }
 };
 
-const deleteButton = <Button negative onClick={handleDelete}>Delete Time Budget</Button>
+const deleteButton = <Button negative onClick={handleDelete} style={{marginBottom: "2em"}}>Delete Time Budget</Button>
 
 
 //Edit Budget Name Modal & Functions
