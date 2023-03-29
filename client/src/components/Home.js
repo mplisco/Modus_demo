@@ -17,7 +17,6 @@ function Home({ budgets, budgetList, currentBudget , handleSetCurrentBudget }) {
     return totalHours;
   };
 
-
   const budgetlist =
     budgetList.length > 0 ? (
       budgetList.map((budget) => (

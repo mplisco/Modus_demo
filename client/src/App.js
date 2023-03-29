@@ -119,6 +119,10 @@ function App() {
             <NewBudget
             currentUser={currentUser}
             handleSetCurrentBudget={handleSetCurrentBudget}
+            budgetList={budgetList}
+            budgets={budgets}
+            setBudgets={setBudgets}
+            setBudgetList={setBudgetList}
             />
           </Route>
           <Route path="/budgets/:budget">
