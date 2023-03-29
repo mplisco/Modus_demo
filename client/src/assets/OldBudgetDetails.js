@@ -1,7 +1,6 @@
-import { lineHeight } from "@mui/system";
 import React, { useState, useEffect }  from "react";
 import { useHistory } from "react-router-dom";
-import { Button  , Modal , Form , Accordion, Segment , Icon} from 'semantic-ui-react';
+import { Button  , Modal , Form} from 'semantic-ui-react';
 import CommitmentModal from "./CommitmentModal";
 import NewCommitmentModal from "./NewCommitmentModal";
 
@@ -9,8 +8,6 @@ import NewCommitmentModal from "./NewCommitmentModal";
 function BudgetDetails ( { setBudgetList , currentUser , currentBudget, setCurrentBudget , handleSetCurrentBudget ,  budgets, setBudgets , onEditBudget}) {
 
   const history = useHistory();
-
-
   //Defining Categories for Budget Presentation
   const categories = [
     { id: 1, name: "Work & Professional" },
@@ -28,18 +25,6 @@ function BudgetDetails ( { setBudgetList , currentUser , currentBudget, setCurre
     {id: 2, name: "Medium Priority"},
     {id: 3, name: "Low Priority"}
   ]
-
-  const [activeIndexes, setActiveIndexes] = useState(categories.map((_, index) => index));
-
-  const handleAccordionClick = (index) => {
-    const newIndex = [...activeIndexes];
-    if (newIndex.includes(index)) {
-      newIndex.splice(newIndex.indexOf(index), 1);
-    } else {
-      newIndex.push(index);
-    }
-    setActiveIndexes(newIndex);
-  };
 
   const priorityColorClass = (priority , surpDef) => {
     if (surpDef < 0 && priority === 3) {
@@ -228,81 +213,61 @@ return (
     </div>
     <br></br>
     <div class="ui centered grid">
-  <div class="ten wide column">
-    {categoryBudgetCommits.map(({ category, budgetCommits, totalHours }, index) => (
-      <div key={category.id}>
-        <Accordion styled fluid>
-          <Accordion.Title
-            active={activeIndexes.includes(index)}
-            index={index}
-            onClick={() => handleAccordionClick(index)}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "1.5em 1em",
+      <div class="ten wide column">
+      {categoryBudgetCommits.map(({ category, budgetCommits , totalHours}) => (
+        <div key={category.id}>
+          <div class="ui raised top attached segment"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
             }}
-          >
-            <div class="vertically fitted item" style={{
-              display: "flex",
-              alignItems: "center",
-              lineHeight: 1 ,
-              alignSelf: "center"
-            }}>
-              <h2 style={{marginRight: "0.5em"}}>{category.name}</h2>
-              <Icon name={activeIndexes.includes(index) ? "chevron up" : "chevron down"} 
-              style={{ 
-                position: 'relative',
-                top: '-6px'}} />
+            >
+          <div class="vertically fitted item">
+            <h2 align="left">{category.name}</h2>
+          </div>
+          <div class="ui tiny statistic vertically fitted item">
+            <div class="value">
+              {totalHours}
             </div>
-            <div class="ui tiny statistic vertically fitted item" style={{ marginBottom: ".25em", alignSelf:"center" }}>
-              <div class="value">{totalHours}</div>
-              <div class="label">Hours</div>
+            <div class="label">
+              Hours
             </div>
-          </Accordion.Title>
-          <Accordion.Content
-            active={activeIndexes.includes(index)}
-            style={{
-              padding: 0,
-            }}
-          >
-            <div class="eight wide column" style={{ marginLeft: "auto", marginRight: "auto" }}>
-              <table class="ui striped table" style={{ width: "100%", margin: "0" }}>
-                <tbody>
-                  {budgetCommits.map((commitment) => (
-                    <tr
-                      key={commitment.id}
-                      onClick={() => handleCommitmentClick(commitment.id)}
-                      className={commitmentRowClass(commitment.priority, surpDef)}
-                    >
-                      <td class="collapsing">
-                        <a>
-                          <h3>{commitment.commitment_name}</h3>
-                        </a>
-                      </td>
-                      <td>
-                        <div class={`ui small ${priorityColorClass(commitment.priority, surpDef)} label`}>
-                          {priorityArray.find((p) => p.id === commitment.priority)?.name}
-                        </div>
-                      </td>
-                      <td class="right aligned collapsing">
-                        <a>
-                          <h4>{commitment.commitment_hours} Hours</h4>
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Accordion.Content>
-        </Accordion>
-        <br />
-      </div>
-    ))}
-  </div>
-</div>
-
+          </div>
+          </div>
+          <div class="ui attached segment">
+          <div class="eight wide column">
+            <table class="ui striped table">
+              <tbody>
+              {budgetCommits.map((commitment) => (
+                <tr key={commitment.id} onClick={()=> handleCommitmentClick(commitment.id)}
+                className={commitmentRowClass(commitment.priority, surpDef)}>
+                  <td class="collapsing">
+                    <a>
+                      <h3>{commitment.commitment_name}</h3>
+                    </a>
+                  </td>
+                  <td>
+                    <div class={`ui small ${priorityColorClass(commitment.priority, surpDef)} label`}>
+                      {priorityArray.find(p => p.id === commitment.priority)?.name}
+                    </div>
+                  </td>
+                  <td class="right aligned collapsing">
+                    <a>
+                      <h4>{commitment.commitment_hours} Hours</h4>
+                    </a>
+                  </td>
+                </tr>
+              ))}
+              </tbody>
+            </table>
+          </div>
+          </div>
+          <br></br>
+        </div>
+      ))}
+    </div>
+    </div>
         {selectedCommitmentId && (
           <CommitmentModal
           open={true}
@@ -331,4 +296,3 @@ return (
 }
 
 export default BudgetDetails
-
