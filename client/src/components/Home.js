@@ -5,8 +5,7 @@ import { AppContext } from "./AppContext";
 
 function Home({ budgets, budgetList, currentBudget , handleSetCurrentBudget }) {
 
-  const handleClick = (e) => {
-    const budgetName = e.target.innerText;
+  const handleClick = (budgetName) => {
     handleSetCurrentBudget(budgetName);
   };
 
@@ -17,14 +16,32 @@ function Home({ budgets, budgetList, currentBudget , handleSetCurrentBudget }) {
     return totalHours;
   };
 
+  const budgetDef = (budgetName) => {
+   return budgetHours(budgetName) > 168 ? true : false;
+
+  }
+
   const budgetlist =
     budgetList.length > 0 ? (
       budgetList.map((budget) => (
         <List.Item key={budget}>
-            <Link to={`/budgets/${budget}`} onClick={handleClick}>
-            <Segment textAlign="left" size="big" >
+            <Link to={`/budgets/${budget}`} onClick={() => handleClick(budget)}>
+            <Segment
+              textAlign="left"
+              size="big"
+              style={
+                budgetDef(budget)
+                  ? { borderColor: "lightcoral", borderWidth: "1px", borderStyle: "solid" }
+                  : {}
+              }
+            >
               <h2>{budget}</h2>
-              <p>{budgetHours(budget)} Hours</p>
+              <p style={
+                budgetDef(budget) ? { color: "red" , fontWeight: "bold" }
+                : {}
+              }
+              >
+                {budgetHours(budget)} Hours</p>
             </Segment>
             </Link>
         </List.Item>
