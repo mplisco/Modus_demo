@@ -41,34 +41,41 @@ https://github.com/mplisco/Modus_demo
 4. A Category has many Commitments
 
 ### ERD
-
-
+<img
+    src="client/src/assets/Modus_Demo_ERD.png"
+    alt="Modus Demo ERD"
+    title="Modus Demo ERD">
 
 ### Model Validations
 
-### Users
+#### Users
 * validates **presence** of first_name, last_name, username, email, and password
 * validates **format** of email (VALID_EMAIL_REGEX)
 * validates **uniqueness** of username and email
 * validates **length** of password (between: 8 and 20)
 
-### Budgets
+#### Budgets
 * validates **presence** of user_id, commitment_id, commitment_hours, priority
 * validates **numericality of priority (0-3) and commitment)hours (<168)
 
-### Commitments
+#### Commitments
 * validates **presence** of commitment_name and category_id
 
-### Category
+#### Category
 * validates **presence of category_name
 
 ### API Endpoints
+
+{Placeholder}
 
 ## Client-Side Configuration
 
 ### React Routes
 
+{Placeholder}
+
 ### React Component Tree
 
+{Placeholder}
 
 
