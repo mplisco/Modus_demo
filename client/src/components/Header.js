@@ -31,6 +31,7 @@ function Header({ currentUser , handleLogout }) {
     const logout_option = <Menu.Item onClick={handleLogoutAndFetch} position="right" class="item">Logout</Menu.Item>
     const newbudget_option = <Menu.Item as={Link} to ="/newbudget" class="item">New Budget</Menu.Item>
     const home_option = <Menu.Item as={Link} to ="/home" class="active item">Home</Menu.Item>
+    const initiatives_option = <Menu.Item as={Link} to ="/weeklyinitiatives" class="item">My Initiatives</Menu.Item>
 
 
     return (
@@ -40,6 +41,7 @@ function Header({ currentUser , handleLogout }) {
                 <div className="border-2 border-solid border-black p-3 max-w-max mx-auto">
                     <Menu class="ui secondary pointing menu">
                         {currentUser ? home_option : null }
+                        {currentUser ? initiatives_option : null}
                         {currentUser ? newbudget_option : null}
                         {currentUser ? profile_option : login_option}
                         {currentUser ? null : signup_option}

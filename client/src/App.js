@@ -8,6 +8,7 @@ import NewBudget from "./components/NewBudget";
 import BudgetDetails from "./components/BudgetDetails";
 import Header from "./components/Header";
 import UserProfile from "./components/UserProfile";
+import WeeklyInitiatives from "./components/WeeklyInitiatives";
 import { AppContext , AppProvider } from "./components/AppContext";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
   const [budgetList, setBudgetList] = useState([]);
   const [currentBudget, setCurrentBudget] = useState(JSON.parse(localStorage.getItem('currentBudget')) || '');
   const [authCheckCompleted, setAuthCheckCompleted] = useState(false)
+  
 
   console.log(currentUser)
 
@@ -132,6 +134,11 @@ function App() {
             budgets={budgets}
             handleSetCurrentBudget={handleSetCurrentBudget}
             onEditBudget={onEditBudget}
+            />
+          </Route>
+          <Route path="/weeklyinitiatives">
+            <WeeklyInitiatives
+            currentUser={currentUser}
             />
           </Route>
           <Route path="/profile">
