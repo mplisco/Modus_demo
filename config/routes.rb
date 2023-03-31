@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  
 
   post "/login", to: "sessions#create"
   delete '/logout', to: 'sessions#destroy'
@@ -13,5 +14,9 @@ Rails.application.routes.draw do
   resources :budgets, except: [:new, :edit]
   resources :commitments, only: [:index, :show]
   resources :categories, only: [:index, :show]
+  resources :progress_logs, except: [:new, :edit]
+  resources :priorities , only: [:index, :show]
+  resources :weeks, only: [:index, :show]
+  resources :weekly_initiatives, except: [:new, :edit]
 
 end

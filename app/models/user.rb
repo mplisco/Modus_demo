@@ -1,8 +1,9 @@
 class User < ApplicationRecord
     has_secure_password
 
-    has_many :budgets
+    has_many :budgets , dependent: :destroy
     has_many :commitments, through: :budgets
+    
 
     validates :username, presence: true, uniqueness: true, length: { minimum: 2}
     validates :first_name, presence: true
