@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_16_224352) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_31_182429) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_16_224352) do
     t.integer "priority"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "priority_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -37,12 +38,49 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_16_224352) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "priorities", force: :cascade do |t|
+    t.string "priority_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "progress_logs", force: :cascade do |t|
+    t.integer "weekly_initiative_id"
+    t.datetime "log_date"
+    t.float "log_amount"
+    t.text "log_description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.string "username"
     t.string "email"
     t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "weekly_initiatives", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "initiative_name"
+    t.integer "initiative_type"
+    t.integer "budget_id"
+    t.integer "category_id"
+    t.integer "commitment_id"
+    t.float "initiative_target"
+    t.integer "priority_id"
+    t.integer "week_id"
+    t.boolean "open"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "weeks", force: :cascade do |t|
+    t.datetime "start_date"
+    t.datetime "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
