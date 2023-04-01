@@ -9,6 +9,7 @@ import BudgetDetails from "./components/BudgetDetails";
 import Header from "./components/Header";
 import UserProfile from "./components/UserProfile";
 import WeeklyInitiatives from "./components/WeeklyInitiatives";
+import NewInitiative from "./components/NewInitiative";
 import { AppContext , AppProvider } from "./components/AppContext";
 
 function App() {
@@ -138,6 +139,11 @@ function App() {
           </Route>
           <Route path="/weeklyinitiatives">
             <WeeklyInitiatives
+            currentUser={currentUser}
+            />
+          </Route>
+          <Route path="/newinitiative">
+            <NewInitiative
             currentUser={currentUser}
             />
           </Route>

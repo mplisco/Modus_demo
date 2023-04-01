@@ -53,7 +53,7 @@ function WeeklyInitiatives() {
         </div>
       </div>
       <br></br>
-        <Button primary as={Link} to="/newbudget">
+        <Button primary as={Link} to="/newinitiative">
                 New Weekly Initiative
         </Button>
     </>
