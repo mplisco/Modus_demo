@@ -137,7 +137,7 @@ function App() {
             onEditBudget={onEditBudget}
             />
           </Route>
-          <Route path="/weeklyinitiatives">
+          <Route path="/initiatives">
             <WeeklyInitiatives
             currentUser={currentUser}
             />

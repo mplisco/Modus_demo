@@ -53,9 +53,11 @@ function WeeklyInitiatives() {
         </div>
       </div>
       <br></br>
-        <Button primary as={Link} to="/newinitiative">
-                New Weekly Initiative
-        </Button>
+        <div style={{marginBottom: "1em"}}>
+            <Button primary as={Link} to="/newinitiative">
+                    New Initiative
+            </Button>
+        </div>
     </>
   );
 }

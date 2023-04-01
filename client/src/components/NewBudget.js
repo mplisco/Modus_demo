@@ -116,7 +116,7 @@ function NewBudget({
 
   return (
     <Container>
-      <h1>Create New Budget</h1>
+      <h1>Add New Time Budget</h1>
       <div className="ui centered grid">
         <div className="eight wide column">
           <div className="ui segment">
@@ -130,7 +130,7 @@ function NewBudget({
                 />
               </Form.Field>
               <Form.Field>
-                <label>Use Existing Budget as Template</label>
+                <label>Use Existing Time Budget as Template</label>
                 <Checkbox
                   toggle
                   onChange={handleToggleUseTemplate}

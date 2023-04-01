@@ -31,7 +31,7 @@ function Header({ currentUser , handleLogout }) {
     const logout_option = <Menu.Item onClick={handleLogoutAndFetch} position="right" class="item">Logout</Menu.Item>
     const newbudget_option = <Menu.Item as={Link} to ="/newbudget" class="item">New Budget</Menu.Item>
     const home_option = <Menu.Item as={Link} to ="/home" class="active item">Home</Menu.Item>
-    const initiatives_option = <Menu.Item as={Link} to ="/weeklyinitiatives" class="item">My Initiatives</Menu.Item>
+    const initiatives_option = <Menu.Item as={Link} to ="/initiatives" class="item">My Initiatives</Menu.Item>
 
 
     return (

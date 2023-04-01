@@ -23,7 +23,9 @@ function NewInitiative({
     const [selectedCommitment, setSelectedCommitment] = useState("")
     const [commitmentOptions, setCommitmentOptions] = useState([])
     const [initiativeTarget, setInitiativeTarget] = useState('')
-   
+    const [priorities , setPriorities] = useState([])
+    const [selectedPriority, setSelectedPriority] = useState("")
+
     const history = useHistory();
 
     useEffect(() => {
@@ -36,6 +38,12 @@ function NewInitiative({
         fetch("/categories")
         .then((r) => r.json())
         .then((data) => setCategories(data))
+        }, []);
+
+    useEffect(() => {
+        fetch("/priorities")
+        .then((r) => r.json())
+        .then((data) => setPriorities(data))
         }, []);
 
     //Handle Initiative Type Selection
@@ -69,7 +77,7 @@ function NewInitiative({
             setCommitmentOptions(commitmentOptions)
         }
 
-    //Handle Commitment Selection   
+    //Handle Commitment Selection
      const commitmentModalOptions = commitmentOptions.map((commitment) => ({
             key: commitment.id,
             text: commitment.commitment_name,
@@ -78,6 +86,17 @@ function NewInitiative({
 
     const handleCommitmentChange = (e, { value }) => {
         setSelectedCommitment(value)
+    }
+    
+    //Handle Initiative Priority
+    const priorityOptions = priorities.map((priority) => ({
+        key: priority.id,
+        text: priority.priority_name,
+        value: priority.id,
+    }));
+
+    const handlePriorityChange = (e, { value }) => {
+        setSelectedPriority(value)
     }
 
     async function handleSubmit(e) {
@@ -115,7 +134,7 @@ function NewInitiative({
 return (
     
     <Container>
-        <h1>Add a New Initiative</h1>
+        <h1>Add New Initiative</h1>
         <div className="ui centered grid">
             <div className="eight wide column">
                 <div className="ui segment">
@@ -162,7 +181,18 @@ return (
                             />
                         </Form.Field>
                         <Form.Field>
-                            <label>New Initiative Target</label>
+                            <label>Initiative Priority Level</label>
+                            <Dropdown
+                                placeholder="Select Initiative Priority Level"
+                                fluid
+                                selection
+                                options={priorityOptions}
+                                value={selectedPriority}
+                                onChange={handlePriorityChange}
+                            />
+                        </Form.Field>
+                        <Form.Field>
+                            <label>New Initiative Target Hours/Instances</label>
                             <input
                                 placeholder="New Initiative Target"
                                 value={initiativeTarget}
