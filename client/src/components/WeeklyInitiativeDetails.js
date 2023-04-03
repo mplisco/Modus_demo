@@ -1,39 +1,37 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
-import { Table , Icon } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import moment from 'moment';
+moment.updateLocale('en', { week: { dow: 1 } });
 
-function WeeklyInitiativeDetails({ currentInitiative, currentUser }) {
-  const [weeks, setWeeks] = useState([]);
-  const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
+
+function WeeklyInitiativeDetails({ currentInitiative }) {
+  const [currentWeek, setCurrentWeek] = useState({});
 
   useEffect(() => {
-    // Fetch the weeks from the backend
-    fetch('/weeks') // Update this with the correct API endpoint
-      .then((response) => response.json())
-      .then((data) => setWeeks(data));
-  }, []);
-
-  const handleWeekNavigation = (direction) => {
-    if (direction === 'previous' && currentWeekIndex > 0) {
-      setCurrentWeekIndex(currentWeekIndex - 1);
-    } else if (direction === 'next' && currentWeekIndex < weeks.length - 1) {
-      setCurrentWeekIndex(currentWeekIndex + 1);
+    if (currentInitiative.week_id) {
+      // Fetch the current week data from the backend
+      fetch(`/weeks/${currentInitiative.week_id}`) // Update this with the correct API endpoint
+        .then((response) => response.json())
+        .then((data) => setCurrentWeek(data));
     }
-  };
-
-  const currentWeek = weeks[currentWeekIndex] || {};
+  }, [currentInitiative]);
 
   // Create an array of dates for the week
   const weekDates = [];
   const startDate = moment(currentWeek.start_date);
   const endDate = moment(currentWeek.end_date);
   let currentDate = startDate;
-
+  
   while (currentDate && endDate && currentDate.isSameOrBefore(endDate)) {
     weekDates.push(currentDate.format('YYYY-MM-DD'));
     currentDate = currentDate.clone().add(1, 'days');
+    if (weekDates.length >= 8) {
+      break;
+    }
   }
+
+  weekDates.push(endDate.format('YYYY-MM-DD'))
 
   // Format progress logs data for the chart
   const chartData = weekDates.map((date) => {
@@ -51,24 +49,32 @@ function WeeklyInitiativeDetails({ currentInitiative, currentUser }) {
     return { ...data, cumulativeProgress };
   });
 
+  function CustomTick({ x, y, payload }) {
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text
+          x={0}
+          y={0}
+          dy={15}
+          textAnchor="middle"
+          fill="#666"
+          fontSize={14}
+        >
+          {moment(payload.value).format("ddd")}
+        </text>
+      </g>
+    );
+  }
+
+
   return (
     <>
       <h1>{currentInitiative.initiative_name}</h1>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
-            <Icon
-                name='arrow left'
-                onClick={() => handleWeekNavigation('previous')}
-                style={{ cursor: 'pointer' }}
-            />
-        <span style={{ margin: '0 10px' }}>
-            {moment(currentWeek.start_date).format('MMM DD')} - {moment(currentWeek.end_date).format('MMM DD')}
-        </span>
-            <Icon
-                name='arrow right'
-                onClick={() => handleWeekNavigation('next')}
-                style={{ cursor: 'pointer' }}
-            />
-        </div>
+      <span>
+          {moment.utc(currentWeek.start_date).format('MMM DD')} - {moment.utc(currentWeek.start_date).add(6, 'days').format('MMM DD')}
+      </span>
+      </div>
       <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
         <AreaChart
           width={800}
@@ -77,31 +83,38 @@ function WeeklyInitiativeDetails({ currentInitiative, currentUser }) {
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" ticks={weekDates} interval={0} />
-          <YAxis domain={[0, Math.max(currentInitiative.initiative_target, cumulativeProgress)]} />
+          <XAxis
+            dataKey="date"
+            ticks={weekDates.slice(1)}
+            interval={0}
+            tick={<CustomTick/>}
+          />
+          <YAxis domain={[0, Math.ceil(currentInitiative.initiative_target * 1.25)]} ticks={Array.from({length: Math.ceil(currentInitiative.initiative_target * 1.25) + 1}, (_, i) => i)} />
           <Tooltip />
           <ReferenceLine y={currentInitiative.initiative_target} stroke="red" />
           <Area type="monotone" dataKey="cumulativeProgress" stroke="#8884d8" fill="#8884d8" />
         </AreaChart>
       </div>
-      <Table celled>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Date</Table.HeaderCell>
-            <Table.HeaderCell>Amount Logged</Table.HeaderCell>
-            <Table.HeaderCell>Description</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {currentInitiative.progress_logs.map((log) => (
-            <Table.Row key={log.id}>
-              <Table.Cell>{moment(log.log_date).format('YYYY-MM-DD')}</Table.Cell>
-              <Table.Cell>{log.log_amount}</Table.Cell>
-              <Table.Cell>{log.log_description || 'N/A'}</Table.Cell>
+      <div className="eight wide column" style={{ marginLeft: "auto", marginRight: "auto", maxWidth: '820px' }}>
+        <Table className="ui striped table" celled style={{ width: "100%", margin: "0" }}>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Date</Table.HeaderCell>
+              <Table.HeaderCell>Amount Logged</Table.HeaderCell>
+              <Table.HeaderCell>Description</Table.HeaderCell>
             </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+          </Table.Header>
+          <Table.Body>
+            {currentInitiative.progress_logs.map((log) => (
+              <Table.Row key={log.id}>
+                <Table.Cell>{moment(log.log_date).format('ddd MMM D')}</Table.Cell>
+                <Table.Cell>{log.log_amount}</Table.Cell>
+                <Table.Cell>{log.log_description || 'N/A'}</Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      </div>
     </>
   );
 }

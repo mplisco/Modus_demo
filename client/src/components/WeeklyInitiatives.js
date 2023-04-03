@@ -1,21 +1,59 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { List, Button, Segment, Progress as SUIProgress } from 'semantic-ui-react';
+import { List, Button, Segment, Progress as SUIProgress , Icon } from 'semantic-ui-react';
 import { AppContext } from './AppContext';
+import moment from 'moment';
+moment.updateLocale('en', { week: { dow: 1 } });
+
 
 function WeeklyInitiatives( {setCurrentInitiative , currentUser}) {
+  const [allInitiatives, setAllInitiatives] = useState([]);
   const [weeklyInitiatives, setWeeklyInitiatives] = useState([]);
+  const [weeks, setWeeks] = useState([]);
+  const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
+
+  useEffect(() => {
+    fetch('/weeks') // Update this with the correct API endpoint
+      .then((response) => response.json())
+      .then((data) => {
+        setWeeks(data);
+        const currentWeekIndex = data.findIndex((week) => {
+          const today = moment();
+          return moment(week.start_date).isSameOrBefore(today) && moment(week.end_date).isSameOrAfter(today);
+        });
+        setCurrentWeekIndex(currentWeekIndex);
+      });
+  }, []);
 
   useEffect(() => {
     fetch('/myinitiatives')
       .then((r) => r.json())
-      .then((data) => setWeeklyInitiatives(data));
+      .then((data) => setAllInitiatives(data));
   }, []);
+
+  useEffect(() => {
+    if (weeks[currentWeekIndex]) {
+      const filteredInitiatives = allInitiatives.filter(
+        (initiative) => initiative.week_id === weeks[currentWeekIndex].id
+      );
+      setWeeklyInitiatives(filteredInitiatives);
+    }
+  }, [allInitiatives, weeks, currentWeekIndex]);
 
   const handleClick = (initiative) => {
     console.log(initiative)
     setCurrentInitiative(initiative)
   };
+
+  const handleWeekNavigation = (direction) => {
+    if (direction === 'previous' && currentWeekIndex > 0) {
+      setCurrentWeekIndex(currentWeekIndex - 1);
+    } else if (direction === 'next' && currentWeekIndex < weeks.length - 1) {
+      setCurrentWeekIndex(currentWeekIndex + 1);
+    }
+  };
+
+  const currentWeek = weeks[currentWeekIndex] || {};
 
 
   const initiativeList =
@@ -53,6 +91,17 @@ function WeeklyInitiatives( {setCurrentInitiative , currentUser}) {
   return (
     <>
       <h1>My Current Initiatives</h1>
+      <div className="ui centered grid">
+        <div className="eight wide column">
+          <Segment textAlign="center">
+            <Icon name="arrow left" onClick={() => handleWeekNavigation('previous')} />
+            <div style={{margin: '0 1em', display: 'inline-block'}}>
+              {moment.utc(currentWeek.start_date).format('MMM DD')} - {moment.utc(currentWeek.start_date).add(6, 'days').format('MMM DD')}
+            </div>
+            <Icon name="arrow right" onClick={() => handleWeekNavigation('next')} />
+          </Segment>
+        </div>
+      </div>
       <div className="ui centered grid">
         <div className="eight wide column">
           <List divided relaxed>
