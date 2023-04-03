@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { List, Button, Segment, Progress as SUIProgress } from 'semantic-ui-react';
 import { AppContext } from './AppContext';
 
-function WeeklyInitiatives() {
+function WeeklyInitiatives( {setCurrentInitiative , currentUser}) {
   const [weeklyInitiatives, setWeeklyInitiatives] = useState([]);
 
   useEffect(() => {
@@ -12,10 +12,17 @@ function WeeklyInitiatives() {
       .then((data) => setWeeklyInitiatives(data));
   }, []);
 
+  const handleClick = (initiative) => {
+    console.log(initiative)
+    setCurrentInitiative(initiative)
+  };
+
+
   const initiativeList =
     weeklyInitiatives.length > 0 ? (
       weeklyInitiatives.map((initiative) => (
         <List.Item key={initiative.id}>
+          <Link to={`/initiatives/${initiative.id}`} onClick={() => handleClick(initiative)}>
           <Segment textAlign="left" size="big">
             <h2>{initiative.initiative_name}</h2>
             <SUIProgress
@@ -30,6 +37,7 @@ function WeeklyInitiatives() {
               </div>
             </SUIProgress>
           </Segment>
+          </Link>
         </List.Item>
       ))
     ) : (
