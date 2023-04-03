@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
-import { Table } from 'semantic-ui-react';
+import { Table , Button } from 'semantic-ui-react';
 import moment from 'moment';
+import AddLogModal from './AddLogModal'
+
+
 moment.updateLocale('en', { week: { dow: 1 } });
 
 
-function WeeklyInitiativeDetails({ currentInitiative }) {
+function WeeklyInitiativeDetails({ currentInitiative , setCurrentInitiative }) {
   const [currentWeek, setCurrentWeek] = useState({});
+  const [progressLogs , setProgressLogs] = useState(currentInitiative.progress_logs || []);
 
   useEffect(() => {
     if (currentInitiative.week_id) {
@@ -16,6 +20,18 @@ function WeeklyInitiativeDetails({ currentInitiative }) {
         .then((data) => setCurrentWeek(data));
     }
   }, [currentInitiative]);
+
+  useEffect(() => {
+    setProgressLogs(currentInitiative.progress_logs || []);
+  }, [currentInitiative.progress_logs]);
+
+  const refreshProgressLogs = () => {
+    fetch(`/initiatives/${currentInitiative.id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setProgressLogs(data.progress_logs || []);
+      });
+  };
 
   // Create an array of dates for the week
   const weekDates = [];
@@ -66,6 +82,26 @@ function WeeklyInitiativeDetails({ currentInitiative }) {
     );
   }
 
+  
+  //Handle Add new progress log
+  
+  const [addLogModalOpen, setAddLogModalOpen] = useState(false);
+
+  const handleAdd = () => {
+    setAddLogModalOpen(true);
+  }
+
+  const handleNewLog = (newLog) => {
+    setCurrentInitiative((prevState) => {
+      return {
+        ...prevState,
+        progress_logs: [...prevState.progress_logs, newLog],
+      };
+    });
+  };
+
+  const addLogButton = <Button primary onClick={handleAdd}>Add Progress Log</Button>;
+
 
   return (
     <>
@@ -115,6 +151,19 @@ function WeeklyInitiativeDetails({ currentInitiative }) {
           </Table.Body>
         </Table>
       </div>
+      <br></br>
+      {addLogButton}
+      <AddLogModal
+      open={addLogModalOpen}
+      onClose={() => setAddLogModalOpen(false)}
+      currentInitiative={currentInitiative}
+      onNewLog={handleNewLog}
+      onSubmit={() => {
+        setAddLogModalOpen(false);
+        refreshProgressLogs();
+      }}
+      >
+      </AddLogModal>
     </>
   );
 }

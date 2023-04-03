@@ -142,6 +142,7 @@ function App() {
             <WeeklyInitiativeDetails
             currentUser={currentUser}
             currentInitiative={currentInitiative}
+            setCurrentInitiative={setCurrentInitiative}
             />
           </Route>
           <Route path="/initiatives">
