@@ -22,6 +22,9 @@ function App() {
   const [currentBudget, setCurrentBudget] = useState(JSON.parse(localStorage.getItem('currentBudget')) || '');
   const [authCheckCompleted, setAuthCheckCompleted] = useState(false)
   const [currentInitiative, setCurrentInitiative] = useState('');
+  const [allInitiatives, setAllInitiatives] = useState([]);
+  const [currentWeek, setCurrentWeek] = useState('');
+
 
   console.log(currentUser)
 
@@ -143,17 +146,24 @@ function App() {
             currentUser={currentUser}
             currentInitiative={currentInitiative}
             setCurrentInitiative={setCurrentInitiative}
+            allInitiatives={allInitiatives}
+            setAllInitiatives={setAllInitiatives}
+            currentWeek={currentWeek}
             />
           </Route>
           <Route path="/initiatives">
             <WeeklyInitiatives
             currentUser={currentUser}
             setCurrentInitiative={setCurrentInitiative}
+            allInitiatives={allInitiatives}
+            setAllInitiatives={setAllInitiatives}
+            setCurrentWeek={setCurrentWeek}
             />
           </Route>
           <Route path="/newinitiative">
             <NewInitiative
             currentUser={currentUser}
+            currentWeek={currentWeek}
             />
           </Route>
           <Route path="/profile">

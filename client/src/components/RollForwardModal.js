@@ -20,7 +20,7 @@ function RollForwardModal({ previousWeekInitiatives, onSubmit , open , setOpen})
   };
 
   return (
-    <Modal
+    <Modal style={{maxWidth: 600}}
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}

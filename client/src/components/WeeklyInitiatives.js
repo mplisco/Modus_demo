@@ -7,8 +7,8 @@ import RollForwardModal from './RollForwardModal';
 moment.updateLocale('en', { week: { dow: 1 } });
 
 
-function WeeklyInitiatives( {setCurrentInitiative , currentUser}) {
-  const [allInitiatives, setAllInitiatives] = useState([]);
+function WeeklyInitiatives( {setCurrentInitiative , currentUser, setAllInitiatives, allInitiatives}) {
+  
   const [weeklyInitiatives, setWeeklyInitiatives] = useState([]);
   const [weeks, setWeeks] = useState([]);
   const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
@@ -27,6 +27,8 @@ function WeeklyInitiatives( {setCurrentInitiative , currentUser}) {
         setCurrentWeekIndex(currentWeekIndex);
       });
   }, []);
+
+  const currentWeekId = weeks[currentWeekIndex]?.id;
 
   useEffect(() => {
     fetch('/myinitiatives')
@@ -152,7 +154,7 @@ function WeeklyInitiatives( {setCurrentInitiative , currentUser}) {
       </div>
       <br></br>
         <div style={{marginBottom: "1em"}}>
-            <Button primary as={Link} to="/newinitiative">
+            <Button primary as={Link} to={{pathname:"/newinitiative", state: {currentWeekId} }}>
                     New Initiative
             </Button>
             {/* <Button onClick={() => setRollForwardModalOpen(true)}>

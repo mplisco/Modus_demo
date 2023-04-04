@@ -4,14 +4,17 @@ import { Table , Button } from 'semantic-ui-react';
 import moment from 'moment';
 import AddLogModal from './AddLogModal';
 import UpdateLogModal from './UpdateLogModal';
+import { useHistory } from 'react-router-dom';
 
 
 moment.updateLocale('en', { week: { dow: 1 } });
 
 
-function WeeklyInitiativeDetails({ currentInitiative , setCurrentInitiative }) {
+function WeeklyInitiativeDetails({ currentInitiative , setCurrentInitiative , setAllInitiatives , allInitiatives }) {
   const [currentWeek, setCurrentWeek] = useState({});
   const [progressLogs , setProgressLogs] = useState(currentInitiative.progress_logs || []);
+
+  const history = useHistory();
 
   useEffect(() => {
     if (currentInitiative.week_id) {
@@ -127,6 +130,27 @@ for (let i = 0; i <= daysInWeek; i++) {
     setSelectedLogId(null);
   };
 
+async function handleDelete(e) {
+  e.preventDefault();
+  const response = await fetch(`/weekly_initiatives/${currentInitiative.id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+})
+if (response.ok) {
+  fetch("/myinitiatives")
+  setAllInitiatives(allInitiatives.filter((initiative) => initiative.id !== currentInitiative.id));
+  history.push(`/initiatives`)
+  window.location.reload()
+} else {
+  throw new Error('Something went wrong ...');
+}}
+
+const deleteButton = <Button negative onClick={handleDelete}>Delete Initiative</Button>
+
+
+
 
   return (
     <>
@@ -179,6 +203,7 @@ for (let i = 0; i <= daysInWeek; i++) {
       </div>
       <br></br>
       {addLogButton}
+      {deleteButton}
       <AddLogModal
       open={addLogModalOpen}
       onClose={() => setAddLogModalOpen(false)}

@@ -6,7 +6,7 @@ import {
   Dropdown,
   Checkbox
 } from "semantic-ui-react";
-import { useHistory} from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 function NewInitiative({
     currentUser,
@@ -14,6 +14,10 @@ function NewInitiative({
     handleSetWeeklyInitiatives,
     weeklyInitiatives,
 }) {
+
+
+    const location = useLocation();
+    const currentWeekId = location.state.currentWeekId
 
     const [initiativeName, setInitiativeName] = useState("");
     const [initiativeType, setInitiativeType] = useState(null);
@@ -109,9 +113,11 @@ function NewInitiative({
             initiative_target: initiativeTarget,
             commitment_id: selectedCommitment,
             category_id: selectedCategory,
-            week_id: 1,
+            week_id: currentWeekId,
             open: true,
+            priority_id: selectedPriority,
         };
+        console.log(newInitiative)
         fetch("/weekly_initiatives", {
             method: "POST",
             headers: {
