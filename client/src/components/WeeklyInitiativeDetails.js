@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
-import { Table , Button } from 'semantic-ui-react';
+import { Table , Button , Modal} from 'semantic-ui-react';
 import moment from 'moment';
 import AddLogModal from './AddLogModal';
 import UpdateLogModal from './UpdateLogModal';
@@ -13,6 +13,8 @@ moment.updateLocale('en', { week: { dow: 1 } });
 function WeeklyInitiativeDetails({ currentInitiative , setCurrentInitiative , setAllInitiatives , allInitiatives }) {
   const [currentWeek, setCurrentWeek] = useState({});
   const [progressLogs , setProgressLogs] = useState(currentInitiative.progress_logs || []);
+  const [editTargetModalOpen, setEditTargetModalOpen] = useState(false);
+  const [updatedTargetValue, setUpdatedTargetValue] = useState(currentInitiative.target_value);
 
   const history = useHistory();
 
@@ -36,7 +38,7 @@ function WeeklyInitiativeDetails({ currentInitiative , setCurrentInitiative , se
   }, [currentInitiative.progress_logs]);
 
   // Create an array of dates for the week
-  const weekDates = [];
+const weekDates = [];
 const startDate = moment(currentWeek.start_date);
 const endDate = moment(currentWeek.end_date);
 const daysInWeek = 7;
@@ -149,7 +151,29 @@ if (response.ok) {
 
 const deleteButton = <Button negative onClick={handleDelete}>Delete Initiative</Button>
 
+const handleEditTarget = () => {
+  setEditTargetModalOpen(true);
+}
 
+const handleTargetUpdate = async () => {
+  const response = await fetch(`/weekly_initiatives/${currentInitiative.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      initiative_target: updatedTargetValue,
+    })
+  })
+
+  if (response.ok) {
+    const updatedInitiative = await response.json();
+    setCurrentInitiative(updatedInitiative);
+    setEditTargetModalOpen(false);
+  } else {
+    throw new Error('Something went wrong ...');
+  }
+};
 
 
   return (
@@ -222,7 +246,39 @@ const deleteButton = <Button negative onClick={handleDelete}>Delete Initiative</
         handleLogDeleted={handleLogDeleted}
         handleLogUpdated={handleLogUpdated}
         />
-      )}
+      )
+      }<Modal
+      style={{maxWidth: 600}}
+      open={editTargetModalOpen}
+      onClose={() => setEditTargetModalOpen(false)}
+      onSubmit={handleTargetUpdate}
+    >
+      <Modal.Header>Edit Target Value</Modal.Header>
+      <Modal.Content>
+        <form className="ui form">
+          <div className="field">
+            <label>Target Value</label>
+            <input
+              type="number"
+              name="targetValue"
+              placeholder="Enter new target value"
+              value={updatedTargetValue}
+              onChange={(e) => setUpdatedTargetValue(e.target.value)}
+              // Add your logic to handle the target value changes
+            />
+          </div>
+        </form>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button
+          onClick={handleTargetUpdate}
+          primary
+        >
+          Update Target
+        </Button>
+      </Modal.Actions>
+    </Modal>
+    <Button onClick={handleEditTarget}>Edit Target</Button>
     </>
   );
 }
