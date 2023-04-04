@@ -174,7 +174,7 @@ const handleEditFormSubmit = async (budgetName) => {
 };
 
 const editModal = (
-  <Modal open={editModalOpen} onClose={() => setEditModalOpen(false)}>
+  <Modal style={{maxWidth: 600}} open={editModalOpen} onClose={() => setEditModalOpen(false)}>
     <Modal.Header>Edit Budget Name</Modal.Header>
     <Modal.Content>
     <Form onSubmit={(e) => {

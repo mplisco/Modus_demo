@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
 import { Table , Button } from 'semantic-ui-react';
 import moment from 'moment';
-import AddLogModal from './AddLogModal'
+import AddLogModal from './AddLogModal';
+import UpdateLogModal from './UpdateLogModal';
 
 
 moment.updateLocale('en', { week: { dow: 1 } });
@@ -25,39 +26,33 @@ function WeeklyInitiativeDetails({ currentInitiative , setCurrentInitiative }) {
     setProgressLogs(currentInitiative.progress_logs || []);
   }, [currentInitiative.progress_logs]);
 
-  const refreshProgressLogs = () => {
-    fetch(`/initiatives/${currentInitiative.id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setProgressLogs(data.progress_logs || []);
-      });
-  };
+  useEffect(() => {
+    if (currentInitiative.progress_logs) {
+      setProgressLogs(currentInitiative.progress_logs);
+    }
+  }, [currentInitiative.progress_logs]);
 
   // Create an array of dates for the week
   const weekDates = [];
-  const startDate = moment(currentWeek.start_date);
-  const endDate = moment(currentWeek.end_date);
-  let currentDate = startDate;
-  
-  while (currentDate && endDate && currentDate.isSameOrBefore(endDate)) {
-    weekDates.push(currentDate.format('YYYY-MM-DD'));
-    currentDate = currentDate.clone().add(1, 'days');
-    if (weekDates.length >= 8) {
-      break;
-    }
-  }
+const startDate = moment(currentWeek.start_date);
+const endDate = moment(currentWeek.end_date);
+const daysInWeek = 7;
 
-  weekDates.push(endDate.format('YYYY-MM-DD'))
+for (let i = 0; i <= daysInWeek; i++) {
+  const currentDate = startDate.clone().add(i, 'days');
+  weekDates.push(currentDate.format('YYYY-MM-DD'));
+}
+
 
   // Format progress logs data for the chart
   const chartData = weekDates.map((date) => {
-    const progress = currentInitiative.progress_logs.find((log) => moment(log.log_date).format('YYYY-MM-DD') === date);
+    const progress = progressLogs.find((log) => moment.utc(log.log_date).format('YYYY-MM-DD') === date);
     return {
       date,
       progress: progress ? progress.log_amount : 0,
     };
   });
-
+  
   // Calculate cumulative progress for each day
   let cumulativeProgress = 0;
   const cumulativeChartData = chartData.map((data) => {
@@ -76,15 +71,22 @@ function WeeklyInitiativeDetails({ currentInitiative , setCurrentInitiative }) {
           fill="#666"
           fontSize={14}
         >
-          {moment(payload.value).format("ddd")}
+          {moment.utc(payload.value).format("ddd")}
         </text>
       </g>
     );
   }
 
   
-  //Handle Add new progress log
+  //Edit progress log Modal & Form
+  const [selectedLogId, setSelectedLogId] = useState(null);
+
+  const handleLogClick = (logId) => {
+    setSelectedLogId(logId);
+  }
   
+  //Handle Add new progress log
+
   const [addLogModalOpen, setAddLogModalOpen] = useState(false);
 
   const handleAdd = () => {
@@ -98,9 +100,32 @@ function WeeklyInitiativeDetails({ currentInitiative , setCurrentInitiative }) {
         progress_logs: [...prevState.progress_logs, newLog],
       };
     });
+    setProgressLogs((prevLogs) => [...prevLogs, newLog]);
+  };
+
+  const handleLogUpdated = (updatedLog) => {
+    setCurrentInitiative((prevState) => {
+      return {
+        ...prevState,
+        progress_logs: prevState.progress_logs.map((log) =>
+          log.id === updatedLog.id ? updatedLog : log
+        ),
+      };
+    });
+    setSelectedLogId(null);
   };
 
   const addLogButton = <Button primary onClick={handleAdd}>Add Progress Log</Button>;
+
+  const handleLogDeleted = ({ deletedLogId }) => {
+    setCurrentInitiative((prevState) => {
+      return {
+        ...prevState,
+        progress_logs: prevState.progress_logs.filter((log) => log.id !== deletedLogId),
+      };
+    });
+    setSelectedLogId(null);
+  };
 
 
   return (
@@ -142,8 +167,9 @@ function WeeklyInitiativeDetails({ currentInitiative , setCurrentInitiative }) {
           </Table.Header>
           <Table.Body>
             {currentInitiative.progress_logs.map((log) => (
-              <Table.Row key={log.id}>
-                <Table.Cell>{moment(log.log_date).format('ddd MMM D')}</Table.Cell>
+              <Table.Row key={log.id}
+              onClick={() => handleLogClick(log.id)}>
+                <Table.Cell>{moment.utc(log.log_date).format('ddd MMM D')}</Table.Cell>
                 <Table.Cell>{log.log_amount}</Table.Cell>
                 <Table.Cell>{log.log_description || 'N/A'}</Table.Cell>
               </Table.Row>
@@ -160,10 +186,18 @@ function WeeklyInitiativeDetails({ currentInitiative , setCurrentInitiative }) {
       onNewLog={handleNewLog}
       onSubmit={() => {
         setAddLogModalOpen(false);
-        refreshProgressLogs();
       }}
       >
       </AddLogModal>
+      {selectedLogId && (
+        <UpdateLogModal 
+        open={true}
+        log={currentInitiative.progress_logs.find((log) => log.id === selectedLogId)}
+        onClose={() => setSelectedLogId(null)}
+        handleLogDeleted={handleLogDeleted}
+        handleLogUpdated={handleLogUpdated}
+        />
+      )}
     </>
   );
 }

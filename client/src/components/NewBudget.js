@@ -115,8 +115,9 @@ function NewBudget({
   }
 
   return (
+    <>
+    <h1>Add New Time Budget</h1>
     <Container>
-      <h1>Add New Time Budget</h1>
       <div className="ui centered grid">
         <div className="eight wide column">
           <div className="ui segment">
@@ -156,6 +157,7 @@ function NewBudget({
       </div>
       <br />
     </Container>
+    </>
   );
   }
 export default NewBudget;

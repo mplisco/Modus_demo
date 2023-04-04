@@ -132,9 +132,9 @@ function NewInitiative({
     
 
 return (
-    
+    <>
+    <h1>Add New Initiative</h1>
     <Container>
-        <h1>Add New Initiative</h1>
         <div className="ui centered grid">
             <div className="eight wide column">
                 <div className="ui segment">
@@ -205,6 +205,7 @@ return (
             </div>
         </div>
     </Container>
+    </>
     )
 }
 export default NewInitiative;

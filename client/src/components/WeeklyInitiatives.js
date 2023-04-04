@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { List, Button, Segment, Progress as SUIProgress , Icon } from 'semantic-ui-react';
 import { AppContext } from './AppContext';
 import moment from 'moment';
+import RollForwardModal from './RollForwardModal';
 moment.updateLocale('en', { week: { dow: 1 } });
 
 
@@ -11,6 +12,8 @@ function WeeklyInitiatives( {setCurrentInitiative , currentUser}) {
   const [weeklyInitiatives, setWeeklyInitiatives] = useState([]);
   const [weeks, setWeeks] = useState([]);
   const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
+  const [previousWeekInitiatives , setPreviousWeekInitiatives] = useState([]);
+  const [rollForwardModalOpen, setRollForwardModalOpen] = useState(false);
 
   useEffect(() => {
     fetch('/weeks') // Update this with the correct API endpoint
@@ -39,6 +42,44 @@ function WeeklyInitiatives( {setCurrentInitiative , currentUser}) {
       setWeeklyInitiatives(filteredInitiatives);
     }
   }, [allInitiatives, weeks, currentWeekIndex]);
+
+  
+  //previous week initiatives - for rollforward
+  useEffect(() => {
+    if (weeks[currentWeekIndex - 1]) {
+      const filteredInitiatives = allInitiatives.filter(
+        (initiative) => initiative.week_id === weeks[currentWeekIndex - 1].id
+      );
+      setPreviousWeekInitiatives(filteredInitiatives);
+      }
+  }, [allInitiatives, weeks, currentWeekIndex]);
+
+  const handleRollForward = (selectedInitiatives) => {
+    selectedInitiatives.forEach((initiative) => {
+      const newInitiative = {
+        ...initiative,
+        week_id: initiative.week_id +1,
+        open: true,
+      }
+      delete newInitiative.progress_logs;
+      delete newInitiative.id;
+
+      console.log('New initiative data:', newInitiative); 
+
+      fetch('/weekly_initiatives', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newInitiative),
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          setAllInitiatives([...allInitiatives, data]);
+        });
+    });
+  };
+
 
   const handleClick = (initiative) => {
     console.log(initiative)
@@ -114,6 +155,15 @@ function WeeklyInitiatives( {setCurrentInitiative , currentUser}) {
             <Button primary as={Link} to="/newinitiative">
                     New Initiative
             </Button>
+            {/* <Button onClick={() => setRollForwardModalOpen(true)}>
+              Roll Forward from Previous Week
+            </Button> */}
+            <RollForwardModal
+              previousWeekInitiatives={previousWeekInitiatives}
+              onSubmit={handleRollForward}
+              open={rollForwardModalOpen}
+              setOpen={setRollForwardModalOpen}
+            />
         </div>
     </>
   );

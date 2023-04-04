@@ -40,11 +40,10 @@ function AddLogModal({ open, onClose, currentInitiative, onNewLog}) {
       console.error(error);
     });
   };
-  
-  
+
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal style={{maxWidth: 600}} open={open} onClose={onClose}>
       <Modal.Header>Add Progress Log</Modal.Header>
       <Modal.Content>
         <Form onSubmit={handleSubmit}>
