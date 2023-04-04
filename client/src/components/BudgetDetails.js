@@ -174,7 +174,7 @@ const handleEditFormSubmit = async (budgetName) => {
 };
 
 const editModal = (
-  <Modal open={editModalOpen} onClose={() => setEditModalOpen(false)}>
+  <Modal style={{maxWidth: 600}} open={editModalOpen} onClose={() => setEditModalOpen(false)}>
     <Modal.Header>Edit Budget Name</Modal.Header>
     <Modal.Content>
     <Form onSubmit={(e) => {
@@ -192,7 +192,7 @@ const editModal = (
   </Modal>
 )
 
-const editButton = <Button secondary onClick={handleEdit}>Edit Budget</Button>
+const editButton = <Button secondary onClick={handleEdit}>Edit Time Budget</Button>
 
 //Edit Commitment Modal and Form -- See also CommitmentModal
 
@@ -211,7 +211,7 @@ const handleAdd = () => {
   setNewCommitmentModalOpen(true);
 }
 
-const addCommitButton = <Button primary onClick={handleAdd}>Add New Commitment</Button>
+const addCommitButton = <Button primary onClick={handleAdd}>New Time Commitment</Button>
 
 return (
     <>

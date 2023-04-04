@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   get '/home', to: 'budgets#budget_list'
   get '/currentbudget', to: 'budgets#current_budget'
 
+  get 'myinitiatives', to: 'weekly_initiatives#user_weekly_initiatives'
+
   resources :users, except: [:new, :edit]
   resources :budgets, except: [:new, :edit]
   resources :commitments, only: [:index, :show]

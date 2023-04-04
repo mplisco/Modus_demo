@@ -68,7 +68,7 @@ function Home({ budgets, budgetList, currentBudget , handleSetCurrentBudget }) {
     </div>
     <br></br>
         <Button primary as={Link} to="/newbudget">
-                Create New Budget
+                New Time Budget
         </Button>
     </>
   );
